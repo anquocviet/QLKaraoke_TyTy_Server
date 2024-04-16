@@ -23,4 +23,6 @@ public interface TaiKhoanRepository {
    public boolean updateTaiKhoan(TaiKhoan taiKhoan);
 
    public boolean deleteTaiKhoan(String maTaiKhoan);
+
+   public TaiKhoan login(TaiKhoan account);
 }

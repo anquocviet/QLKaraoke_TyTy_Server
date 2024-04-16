@@ -15,6 +15,8 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 
 @Getter
@@ -27,7 +29,10 @@ import java.time.Instant;
       @NamedQuery(name = "PhieuDatPhong.findAll", query = "SELECT pdp FROM PhieuDatPhong pdp")
 
 })
-public class PhieuDatPhong {
+public class PhieuDatPhong implements Serializable {
+   @Serial
+   private static final long serialVersionUID = -6562395586172805484L;
+
    @Id
    @Column(name = "MaPhieuDat", nullable = false)
    private String maPhieuDat;
@@ -36,19 +41,19 @@ public class PhieuDatPhong {
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaPhong")
    @ToString.Exclude
-   private Phong maPhong;
+   private Phong phong;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhachHang")
    @ToString.Exclude
-   private KhachHang maKhachHang;
+   private KhachHang khachHang;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude
-   private NhanVien maNhanVien;
+   private NhanVien nhanVien;
 
    @Column(name = "ThoiGianLap")
    private Instant thoiGianLap;
@@ -62,11 +67,11 @@ public class PhieuDatPhong {
    @Column(name = "TinhTrang")
    private Integer tinhTrang;
 
-   public PhieuDatPhong(String maPhieuDat, Phong maPhong, KhachHang maKhachHang, NhanVien maNhanVien, Instant thoiGianLap, Instant thoiGianNhan, String ghiChu, Integer tinhTrang) {
+   public PhieuDatPhong(String maPhieuDat, Phong phong, KhachHang khachHang, NhanVien nhanVien, Instant thoiGianLap, Instant thoiGianNhan, String ghiChu, Integer tinhTrang) {
       this.maPhieuDat = maPhieuDat;
-      this.maPhong = maPhong;
-      this.maKhachHang = maKhachHang;
-      this.maNhanVien = maNhanVien;
+      this.phong = phong;
+      this.khachHang = khachHang;
+      this.nhanVien = nhanVien;
       this.thoiGianLap = thoiGianLap;
       this.thoiGianNhan = thoiGianNhan;
       this.ghiChu = ghiChu;

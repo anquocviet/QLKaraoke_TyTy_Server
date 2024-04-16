@@ -25,17 +25,4 @@ public class Server {
          e.printStackTrace();
       }
    }
-
-
-   private class ServerThread implements Runnable {
-      public ServerThread(Socket client) {
-      }
-
-      @Override
-      public void run() {
-         while (true) {
-            // do something
-         }
-      }
-   }
 }
