@@ -10,13 +10,19 @@ import java.util.List;
  * @date: 9/4/24
  */
 public interface PhongRepository {
-   public boolean addPhong();
+   public boolean addPhong(Phong room);
 
-   public boolean updatePhong();
+   public boolean updatePhong(Phong room);
 
-   public boolean deletePhong();
+   public boolean deletePhong(String idRoom);
 
    public List<Phong> findAll();
 
    public Phong findByMaPhong(String maPhong);
+
+   public Long countRoomStatus(int status);
+
+   public List<Phong> findRoomByTypeStatusCapacity(List<Integer> arrType, List<Integer> arrStatus, int capacity);
+
+   public List<Phong> findRoomByStatus(int status);
 }

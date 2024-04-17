@@ -25,7 +25,12 @@ import java.util.Set;
 @Entity
 @NamedQueries({
       @NamedQuery(name = "Phong.findByMaPhong", query = "SELECT p FROM Phong p WHERE p.maPhong = :maPhong"),
-      @NamedQuery(name = "Phong.findAll", query = "SELECT p FROM Phong p")
+      @NamedQuery(name = "Phong.findAll", query = "SELECT p FROM Phong p"),
+      @NamedQuery(name = "Phong.countRoomStatus", query = "SELECT COUNT(p) FROM Phong p WHERE p.tinhTrang = :status"),
+      @NamedQuery(name = "Phong.findRoomByTypeStatusCapacity",
+            query = "SELECT p FROM Phong p WHERE p.loaiPhong IN (:arrType) AND p.tinhTrang IN (:arrStatus) AND p.sucChua >= :capacity"),
+      @NamedQuery(name = "Phong.findRoomByStatus", query = "SELECT p FROM Phong p WHERE p.tinhTrang = :status")
+
 })
 public class Phong implements Serializable {
    @Serial

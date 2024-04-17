@@ -26,7 +26,8 @@ import java.time.Instant;
 @Entity
 @NamedQueries({
       @NamedQuery(name = "PhieuDatPhong.findByMaPhieuDat", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.maPhieuDat = :maPhieuDat"),
-      @NamedQuery(name = "PhieuDatPhong.findAll", query = "SELECT pdp FROM PhieuDatPhong pdp")
+      @NamedQuery(name = "PhieuDatPhong.findAll", query = "SELECT pdp FROM PhieuDatPhong pdp"),
+      @NamedQuery(name = "PhieuDatPhong.findBookingTicketByRoomID", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.phong.maPhong = :roomID")
 
 })
 public class PhieuDatPhong implements Serializable {
