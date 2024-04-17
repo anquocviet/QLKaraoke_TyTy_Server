@@ -1,6 +1,8 @@
 package services;
 
 import entities.HoaDonThanhToan;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import repositories.HoaDonThanhToanRepository;
 
 import java.time.LocalDate;
@@ -12,6 +14,13 @@ import java.util.List;
  * @date: 9/4/24
  */
 public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
+   private EntityManager em = null;
+   private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
+
+   public HoaDonThanhToanService() {
+      em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
+   }
+
    @Override
    public boolean addHoaDonThanhToan(HoaDonThanhToan bill) {
       return false;
@@ -29,7 +38,7 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
 
    @Override
    public List<HoaDonThanhToan> findAll() {
-      return List.of();
+      return em.createNamedQuery("HoaDonThanhToan.findAll").getResultList();
    }
 
    @Override
@@ -39,6 +48,7 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
 
    @Override
    public List<HoaDonThanhToan> findBill(LocalDate date) {
+//      return em.createNamedQuery("HoaDonThanhToan.findByNgayLap").setParameter("ngayLap", date).getResultList();
       return List.of();
    }
 

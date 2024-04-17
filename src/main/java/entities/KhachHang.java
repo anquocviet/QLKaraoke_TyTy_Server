@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -24,7 +26,10 @@ import java.util.Set;
       @NamedQuery(name = "KhachHang.findByTenKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.tenKhachHang = :tenKhachHang"),
       @NamedQuery(name = "KhachHang.findBySoDienThoai", query = "SELECT kh FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai"),
 })
-public class KhachHang {
+public class KhachHang implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 2141924125267023221L;
+
    @Id
    @Column(name = "MaKhachHang", nullable = false)
    private String maKhachHang;
@@ -41,11 +46,11 @@ public class KhachHang {
    @Column(name = "GioiTinh")
    private Integer gioiTinh;
 
-   @OneToMany(mappedBy = "maKhachHang")
+   @OneToMany(mappedBy = "khachHang")
    @ToString.Exclude
    private Set<HoaDonThanhToan> listHoaDonThanhToan;
 
-   @OneToMany(mappedBy = "maKhachHang")
+   @OneToMany(mappedBy = "khachHang")
    @ToString.Exclude
    private Set<PhieuDatPhong> listPhieuDatPhong;
 

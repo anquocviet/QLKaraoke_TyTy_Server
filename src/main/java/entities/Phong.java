@@ -3,6 +3,8 @@ package entities;
 import enums.Enum_LoaiPhong;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -12,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -21,14 +25,23 @@ import java.util.Set;
 @Entity
 @NamedQueries({
       @NamedQuery(name = "Phong.findByMaPhong", query = "SELECT p FROM Phong p WHERE p.maPhong = :maPhong"),
-      @NamedQuery(name = "Phong.findAll", query = "SELECT p FROM Phong p")
+      @NamedQuery(name = "Phong.findAll", query = "SELECT p FROM Phong p"),
+      @NamedQuery(name = "Phong.countRoomStatus", query = "SELECT COUNT(p) FROM Phong p WHERE p.tinhTrang = :status"),
+      @NamedQuery(name = "Phong.findRoomByTypeStatusCapacity",
+            query = "SELECT p FROM Phong p WHERE p.loaiPhong IN (:arrType) AND p.tinhTrang IN (:arrStatus) AND p.sucChua >= :capacity"),
+      @NamedQuery(name = "Phong.findRoomByStatus", query = "SELECT p FROM Phong p WHERE p.tinhTrang = :status")
+
 })
-public class Phong {
+public class Phong implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 293080990014196469L;
+
    @Id
    @Column(name = "MaPhong", nullable = false)
    private String maPhong;
 
    @Column(name = "LoaiPhong", columnDefinition = "int default 0") // 0: THUONG, 1: VIP
+   @Enumerated(EnumType.ORDINAL)
    private Enum_LoaiPhong loaiPhong;
 
    @Column(name = "TinhTrang")
@@ -40,11 +53,11 @@ public class Phong {
    @Column(name = "GiaPhong")
    private Integer giaPhong;
 
-   @OneToMany(mappedBy = "maPhong")
+   @OneToMany(mappedBy = "phong")
    @ToString.Exclude
    private Set<ChiTietHD_Phong> chiTietHD_Phongs;
 
-   @OneToMany(mappedBy = "maPhong")
+   @OneToMany(mappedBy = "phong")
    @ToString.Exclude
    private Set<PhieuDatPhong> phieuDatPhongs;
 

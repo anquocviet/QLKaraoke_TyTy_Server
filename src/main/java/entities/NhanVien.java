@@ -4,6 +4,8 @@ import enums.Enum_ChucVu;
 import enums.Enum_TrangThaiLamViec;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -13,6 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 
@@ -29,7 +33,10 @@ import java.util.Set;
       @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE nv.soDienThoai = :soDienThoai"),
 
 })
-public class NhanVien {
+public class NhanVien implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 4231211857730583614L;
+
    @Id
    @Column(name = "MaNhanVien", nullable = false)
    private String maNhanVien;
@@ -52,20 +59,22 @@ public class NhanVien {
    @Column(name = "GioiTinh")
    private Integer gioiTinh;
 
-   @Column(name = "ChucVu") // 0: QUANLY, 1: NHANVIENTIEPTAN, 2: NHANVIENPHUCVU, 3: BAOVE
+   @Column(name = "ChucVu")
+   @Enumerated(EnumType.STRING)
    private Enum_ChucVu chucVu;
 
-   @Column(name = "TrangThai") // 0: CONLAMVIEC, 1: DANGHI
+   @Column(name = "TrangThai")
+   @Enumerated(EnumType.STRING)
    private Enum_TrangThaiLamViec trangThai;
 
    @Column(name = "AnhDaiDien")
    private String anhDaiDien;
 
-   @OneToMany(mappedBy = "maNhanVien")
+   @OneToMany(mappedBy = "nhanVien")
    @ToString.Exclude
    private Set<HoaDonThanhToan> listHoaDonThanhToan;
 
-   @OneToMany(mappedBy = "maNhanVien")
+   @OneToMany(mappedBy = "nhanVien")
    @ToString.Exclude
    private Set<PhieuDatPhong> listPhieuDatPhong;
 

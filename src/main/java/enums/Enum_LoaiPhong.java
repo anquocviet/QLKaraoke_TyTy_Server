@@ -4,6 +4,9 @@
  */
 package enums;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 /**
  * @author Thạch
  */
@@ -26,5 +29,9 @@ public enum Enum_LoaiPhong {
 
    public static Enum_LoaiPhong getLoaiPhong(String tenLoaiPhong) {
       return tenLoaiPhong.equals("Thường") ? THUONG : VIP;
+   }
+
+   public static List<Enum_LoaiPhong> getEnumList(List<Integer> arrType) {
+      return Stream.of(Enum_LoaiPhong.values()).filter(e -> arrType.contains(Enum_LoaiPhong.getValue(e))).toList();
    }
 }

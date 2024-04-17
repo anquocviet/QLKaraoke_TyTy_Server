@@ -1,6 +1,7 @@
 package services;
 
 import entities.NhanVien;
+import jakarta.persistence.EntityManager;
 import repositories.NhanVienRepository;
 
 import java.util.List;
@@ -11,14 +12,25 @@ import java.util.List;
  * @date: 9/4/24
  */
 public class NhanVienService implements NhanVienRepository {
+   private EntityManager em = null;
+   private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
+
+   public NhanVienService() {
+      em = jakarta.persistence.Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
+   }
+
    @Override
    public List<NhanVien> findAll() {
-      return List.of();
+      return em.createNamedQuery("NhanVien.findAll", NhanVien.class).getResultList();
    }
 
    @Override
    public NhanVien findByMaNhanVien(String maNhanVien) {
-      return null;
+      return em.createNamedQuery("NhanVien.findByMaNhanVien", NhanVien.class)
+                   .setParameter("maNhanVien", maNhanVien)
+                   .getResultStream()
+                   .findFirst()
+                   .orElse(null);
    }
 
    @Override
@@ -49,5 +61,9 @@ public class NhanVienService implements NhanVienRepository {
    @Override
    public boolean deleteEmployee(String maNhanVien) {
       return false;
+   }
+
+   public void close() {
+      em.close();
    }
 }

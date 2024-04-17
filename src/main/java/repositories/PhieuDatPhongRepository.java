@@ -20,4 +20,6 @@ public interface PhieuDatPhongRepository {
    public boolean updatePhieuDatPhong(PhieuDatPhong phieuDatPhong);
 
    public boolean deletePhieuDatPhong(String maPhieuDat);
+
+   public PhieuDatPhong findBookingTicketByRoomID(String roomID);
 }

@@ -15,6 +15,9 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -24,9 +27,13 @@ import org.hibernate.annotations.OnDeleteAction;
       @NamedQuery(name = "TaiKhoan.findByMaTaiKhoan", query = "SELECT tk FROM TaiKhoan tk WHERE tk.maTaiKhoan = :maTaiKhoan"),
       @NamedQuery(name = "TaiKhoan.findAll", query = "SELECT tk FROM TaiKhoan tk"),
       @NamedQuery(name = "TaiKhoan.findByName", query = "SELECT tk FROM TaiKhoan tk WHERE tk.tenDangNhap = :tenDangNhap"),
-      @NamedQuery(name = "TaiKhoan.findByMaNhanVien", query = "SELECT tk FROM TaiKhoan tk WHERE tk.maNhanVien = :maNhanVien")
+      @NamedQuery(name = "TaiKhoan.findByMaNhanVien", query = "SELECT tk FROM TaiKhoan tk WHERE tk.nhanVien.maNhanVien = :maNhanVien"),
+      @NamedQuery(name = "TaiKhoan.login", query = "SELECT tk FROM TaiKhoan tk WHERE tk.tenDangNhap = :tenDangNhap AND tk.matKhau = :matKhau")
 })
-public class TaiKhoan {
+public class TaiKhoan implements Serializable {
+   @Serial
+   private static final long serialVersionUID = -3066844908200436449L;
+
    @Id
    @Column(name = "MaTaiKhoan", nullable = false)
    private String maTaiKhoan;
@@ -41,12 +48,12 @@ public class TaiKhoan {
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude
-   private NhanVien maNhanVien;
+   private NhanVien nhanVien;
 
-   public TaiKhoan(String maTaiKhoan, String tenDangNhap, String matKhau, NhanVien maNhanVien) {
+   public TaiKhoan(String maTaiKhoan, String tenDangNhap, String matKhau, NhanVien nhanVien) {
       this.maTaiKhoan = maTaiKhoan;
       this.tenDangNhap = tenDangNhap;
       this.matKhau = matKhau;
-      this.maNhanVien = maNhanVien;
+      this.nhanVien = nhanVien;
    }
 }

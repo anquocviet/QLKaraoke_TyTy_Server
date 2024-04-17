@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 
@@ -29,7 +31,10 @@ import java.util.Set;
       @NamedQuery(name = "CT_Khuyenmai.updateLuotSuDungConLai", query = "UPDATE CT_KhuyenMai k SET k.luotSuDungConLai = :luotSuDungConLai WHERE k.maKhuyenMai = :maKhuyenMai")
 
 })
-public class CT_KhuyenMai {
+public class CT_KhuyenMai implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 2109524451725521643L;
+
    @Id
    @Column(name = "MaKhuyenMai", nullable = false)
    private String maKhuyenMai;
@@ -49,7 +54,7 @@ public class CT_KhuyenMai {
    @Column(name = "ChietKhau")
    private Integer chietKhau;
 
-   @OneToMany(mappedBy = "maKhuyenMai")
+   @OneToMany(mappedBy = "khuyenMai")
    @ToString.Exclude
    private Set<HoaDonThanhToan> listHoaDonThanhToan;
 

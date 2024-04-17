@@ -16,6 +16,9 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -28,7 +31,9 @@ import org.hibernate.annotations.OnDeleteAction;
             query = "SELECT c FROM ChiTietHD_DichVu c WHERE c.id.maDichVu = :maDichVu"),
 
 })
-public class ChiTietHD_DichVu {
+public class ChiTietHD_DichVu implements Serializable {
+   @Serial
+   private static final long serialVersionUID = -6231783216106061725L;
    @EmbeddedId
    private ChiTietHD_DichVuId id;
 
@@ -37,14 +42,14 @@ public class ChiTietHD_DichVu {
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaHoaDon", nullable = false)
    @ToString.Exclude
-   private HoaDonThanhToan maHoaDon;
+   private HoaDonThanhToan hoaDon;
 
    @MapsId("maDichVu")
    @ManyToOne(fetch = FetchType.LAZY, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaDichVu", nullable = false)
    @ToString.Exclude
-   private DichVu maDichVu;
+   private DichVu dichVu;
 
    @Column(name = "SoLuong")
    private Integer soLuong;
@@ -52,10 +57,10 @@ public class ChiTietHD_DichVu {
    @Column(name = "ThanhTien")
    private Integer thanhTien;
 
-   public ChiTietHD_DichVu(ChiTietHD_DichVuId id, HoaDonThanhToan maHoaDon, DichVu maDichVu, Integer soLuong, Integer thanhTien) {
+   public ChiTietHD_DichVu(ChiTietHD_DichVuId id, HoaDonThanhToan hoaDon, DichVu dichVu, Integer soLuong, Integer thanhTien) {
       this.id = id;
-      this.maHoaDon = maHoaDon;
-      this.maDichVu = maDichVu;
+      this.hoaDon = hoaDon;
+      this.dichVu = dichVu;
       this.soLuong = soLuong;
       this.thanhTien = thanhTien;
    }

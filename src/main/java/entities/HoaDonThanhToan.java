@@ -16,6 +16,8 @@ import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,11 +30,15 @@ import java.util.Set;
 @NamedQueries({
       @NamedQuery(name = "HoaDonThanhToan.findAll", query = "SELECT h FROM HoaDonThanhToan h"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaHoaDon", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maHoaDon = :maHoaDon"),
-      @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHang", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maKhachHang = :maKhachHang"),
-      @NamedQuery(name = "HoaDonThanhToan.findByMaNhanVien", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maNhanVien = :maNhanVien"),
-      @NamedQuery(name = "HoaDonThanhToan.findByMaKhuyenMai", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maKhuyenMai = :maKhuyenMai"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHang", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khachHang.maKhachHang = :maKhachHang"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaNhanVien", query = "SELECT h FROM HoaDonThanhToan h WHERE h.nhanVien.maNhanVien = :maNhanVien"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaKhuyenMai", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khuyenMai.maKhuyenMai = :maKhuyenMai"),
+      @NamedQuery(name = "HoaDonThanhTOan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
 })
-public class HoaDonThanhToan {
+public class HoaDonThanhToan implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 4024898374929922829L;
+
    @Id
    @Column(name = "MaHoaDon", nullable = false)
    private String maHoaDon;
@@ -41,19 +47,19 @@ public class HoaDonThanhToan {
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhachHang")
    @ToString.Exclude
-   private KhachHang maKhachHang;
+   private KhachHang khachHang;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude
-   private NhanVien maNhanVien;
+   private NhanVien nhanVien;
 
    @ManyToOne(fetch = FetchType.LAZY)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhuyenMai")
    @ToString.Exclude
-   private CT_KhuyenMai maKhuyenMai;
+   private CT_KhuyenMai khuyenMai;
 
    @Column(name = "NgayLap")
    private Instant ngayLap;
@@ -61,19 +67,19 @@ public class HoaDonThanhToan {
    @Column(name = "TongTien")
    private Integer tongTien;
 
-   @OneToMany(mappedBy = "maHoaDon", fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "hoaDon", fetch = FetchType.LAZY)
    @ToString.Exclude
    private Set<ChiTietHD_DichVu> listCTDV = new HashSet<>();
 
-   @OneToMany(mappedBy = "maHoaDon", fetch = FetchType.LAZY)
+   @OneToMany(mappedBy = "hoaDon", fetch = FetchType.LAZY)
    @ToString.Exclude
    private Set<ChiTietHD_Phong> listCTP = new HashSet<>();
 
-   public HoaDonThanhToan(String maHoaDon, KhachHang maKhachHang, NhanVien maNhanVien, CT_KhuyenMai maKhuyenMai, Instant ngayLap, Integer tongTien) {
+   public HoaDonThanhToan(String maHoaDon, KhachHang khachHang, NhanVien nhanVien, CT_KhuyenMai khuyenMai, Instant ngayLap, Integer tongTien) {
       this.maHoaDon = maHoaDon;
-      this.maKhachHang = maKhachHang;
-      this.maNhanVien = maNhanVien;
-      this.maKhuyenMai = maKhuyenMai;
+      this.khachHang = khachHang;
+      this.nhanVien = nhanVien;
+      this.khuyenMai = khuyenMai;
       this.ngayLap = ngayLap;
       this.tongTien = tongTien;
    }

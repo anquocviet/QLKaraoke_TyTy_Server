@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +27,10 @@ import java.util.Set;
       @NamedQuery(name = "DichVu.findByTenDichVu", query = "SELECT d FROM DichVu d WHERE d.tenDichVu = :tenDichVu"),
       @NamedQuery(name = "DichVu.countAll", query = "SELECT COUNT(d) FROM DichVu d")
 })
-public class DichVu {
+public class DichVu implements Serializable {
+   @Serial
+   private static final long serialVersionUID = 8467030042899669890L;
+
    @Id
    @Column(name = "MaDichVu", nullable = false)
    private String maDichVu;
@@ -45,7 +50,7 @@ public class DichVu {
    @Column(name = "AnhMinhHoa")
    private String anhMinhHoa;
 
-   @OneToMany(mappedBy = "maDichVu")
+   @OneToMany(mappedBy = "dichVu")
    @ToString.Exclude
    private Set<ChiTietHD_DichVu> chiTietDichVus = new HashSet<>();
 

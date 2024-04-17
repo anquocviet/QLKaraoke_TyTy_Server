@@ -1,6 +1,8 @@
 package services;
 
 import entities.TaiKhoan;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 import repositories.TaiKhoanRepository;
 
 import java.util.List;
@@ -11,6 +13,13 @@ import java.util.List;
  * @date: 9/4/24
  */
 public class TaiKhoanService implements TaiKhoanRepository {
+   private EntityManager em = null;
+   private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
+
+   public TaiKhoanService() {
+      em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
+   }
+
    @Override
    public TaiKhoan findByMaTaiKhoan(String maTaiKhoan) {
       return null;
@@ -44,5 +53,17 @@ public class TaiKhoanService implements TaiKhoanRepository {
    @Override
    public boolean deleteTaiKhoan(String maTaiKhoan) {
       return false;
+   }
+
+   @Override
+   public TaiKhoan login(TaiKhoan account) {
+      return (TaiKhoan) em.createNamedQuery("TaiKhoan.login")
+                              .setParameter("tenDangNhap", account.getTenDangNhap())
+                              .setParameter("matKhau", account.getMatKhau())
+                              .getSingleResult();
+   }
+
+   public void close() {
+      em.close();
    }
 }
