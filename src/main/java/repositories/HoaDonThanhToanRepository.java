@@ -4,6 +4,7 @@ import entities.HoaDonThanhToan;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description
@@ -20,23 +21,19 @@ public interface HoaDonThanhToanRepository {
 
    public List<HoaDonThanhToan> findAll();
 
-   public HoaDonThanhToan findBill(String billID);
-
    public List<HoaDonThanhToan> findBill(LocalDate date);
 
-   public List<HoaDonThanhToan> findByRoomID();
+   public List<HoaDonThanhToan> findByRoomID(String roomID);
 
-   public List<HoaDonThanhToan> findByCustomerID();
+   public List<HoaDonThanhToan> findByCustomerID(String customerID);
 
-   public List<HoaDonThanhToan> findByEmployeeID();
-
-   public List<HoaDonThanhToan> statistical(LocalDate date, String type);
+   public List<HoaDonThanhToan> findByEmployeeID(String employeeID);
 
    public int countBill();
 
    public int countBill(String customerID);
 
-   public int countBill(LocalDate date, String type);
+   public Map<Integer, Integer> getBillsByDate(LocalDate date, String type);
 
    public long calcMoney();
 

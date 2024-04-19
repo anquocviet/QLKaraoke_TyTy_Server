@@ -4,10 +4,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class HoaDonThanhToanServiceTest {
    private HoaDonThanhToanService service;
+
    @BeforeEach
    void setUp() {
       service = new HoaDonThanhToanService();
@@ -37,11 +36,6 @@ class HoaDonThanhToanServiceTest {
 
    @Test
    void findBill() {
-
-   }
-
-   @Test
-   void testFindBill() {
    }
 
    @Test
@@ -57,10 +51,6 @@ class HoaDonThanhToanServiceTest {
    }
 
    @Test
-   void statistical() {
-   }
-
-   @Test
    void countBill() {
    }
 
@@ -69,7 +59,7 @@ class HoaDonThanhToanServiceTest {
    }
 
    @Test
-   void testCountBill1() {
+   void getBillsByDate() {
    }
 
    @Test
