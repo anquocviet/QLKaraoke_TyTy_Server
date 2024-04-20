@@ -57,6 +57,10 @@ public class KhachHang implements Serializable {
    @ToString.Exclude
    private Set<PhieuDatPhong> listPhieuDatPhong;
 
+    public KhachHang(String maKhachHang) {
+        this.maKhachHang = maKhachHang;
+    }
+
    public KhachHang(String maKhachHang, String tenKhachHang, Integer soDienThoai, Integer namSinh, Integer gioiTinh) {
       this.maKhachHang = maKhachHang;
       this.tenKhachHang = tenKhachHang;

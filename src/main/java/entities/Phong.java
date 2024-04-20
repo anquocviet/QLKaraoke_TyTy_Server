@@ -63,6 +63,9 @@ public class Phong implements Serializable {
    @ToString.Exclude
    private Set<PhieuDatPhong> phieuDatPhongs;
 
+    public Phong(String maPhong) {
+        this.maPhong = maPhong;
+    }
    public Phong(String maPhong, Enum_LoaiPhong loaiPhong, Integer tinhTrang, Integer sucChua, Integer giaPhong) {
       this.maPhong = maPhong;
       this.loaiPhong = loaiPhong;

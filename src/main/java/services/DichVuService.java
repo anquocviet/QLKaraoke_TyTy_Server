@@ -23,6 +23,16 @@ public class DichVuService implements DichVuRepository {
 
    @Override
    public boolean addDichVu(DichVu dv) {
+      EntityTransaction transaction = em.getTransaction();
+      try {
+         transaction.begin();
+         em.persist(dv);
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         transaction.rollback();
+         e.printStackTrace();
+      }
       return false;
    }
 
@@ -49,9 +59,12 @@ public class DichVuService implements DichVuRepository {
       EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
-         em.remove(dv);
-         transaction.commit();
-         return true;
+         DichVu dichVuToDelete = em.find(DichVu.class, dv.getMaDichVu());
+         if (dichVuToDelete != null) {
+            em.remove(dichVuToDelete);
+            transaction.commit();
+            return true;
+         }
       } catch (Exception e) {
          transaction.rollback();
          e.printStackTrace();
@@ -65,8 +78,10 @@ public class DichVuService implements DichVuRepository {
    }
 
    @Override
-   public DichVu findDichVuById(String maDichVu) {
-      return null;
+   public List<DichVu> findDichVuById(String maDichVu) {
+      return em.createQuery("SELECT d FROM DichVu d WHERE d.maDichVu LIKE :maDichVu", DichVu.class)
+              .setParameter("maDichVu", "%" + maDichVu + "%")
+              .getResultList();
    }
 
    @Override
@@ -79,5 +94,9 @@ public class DichVuService implements DichVuRepository {
    @Override
    public int countDichVu() {
       return 0;
+   }
+
+   public void close() {
+      em.close();
    }
 }

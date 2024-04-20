@@ -13,7 +13,7 @@ import java.util.List;
 public interface PhieuDatPhongRepository {
    public List<PhieuDatPhong> findAll();
 
-   public PhieuDatPhong findByMaPhieuDat(String maPhieuDat);
+   public List<PhieuDatPhong> findByMaPhieuDat(String maPhieuDat);
 
    public boolean addPhieuDatPhong(PhieuDatPhong phieuDatPhong);
 
