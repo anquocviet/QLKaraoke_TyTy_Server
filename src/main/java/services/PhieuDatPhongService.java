@@ -24,18 +24,35 @@ public class PhieuDatPhongService implements PhieuDatPhongRepository {
 
    @Override
    public List<PhieuDatPhong> findAll() {
-      return List.of();
+        return em.createNamedQuery("PhieuDatPhong.findAll", PhieuDatPhong.class).getResultList();
    }
 
-   @Override
-   public PhieuDatPhong findByMaPhieuDat(String maPhieuDat) {
-      return null;
-   }
+    @Override
+    public List<PhieuDatPhong> findByMaPhieuDat(String maPhieuDat) {
+        return em.createQuery("SELECT p FROM PhieuDatPhong p WHERE p.maPhieuDat LIKE :maPhieuDat", PhieuDatPhong.class)
+                .setParameter("maPhieuDat", "%" + maPhieuDat + "%")
+                .getResultList();
+    }
 
-   @Override
-   public boolean addPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
-      return false;
-   }
+
+
+    @Override
+    public boolean addPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
+        try {
+            System.out.println("Persisting: " + phieuDatPhong);
+            transaction.begin();
+            em.persist(phieuDatPhong);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            System.out.println("Exception occurred: " + e.getMessage());
+            e.printStackTrace();
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            return false;
+        }
+    }
 
    @Override
    public boolean updatePhieuDatPhong(PhieuDatPhong phieuDatPhong) {
@@ -52,7 +69,19 @@ public class PhieuDatPhongService implements PhieuDatPhongRepository {
 
    @Override
    public boolean deletePhieuDatPhong(String maPhieuDat) {
-      return false;
+        try {
+             transaction.begin();
+             PhieuDatPhong phieuDatPhong = em.find(PhieuDatPhong.class, maPhieuDat);
+             if (phieuDatPhong == null) {
+                return false;
+             }
+             em.remove(phieuDatPhong);
+             transaction.commit();
+             return true;
+        } catch (Exception e) {
+             transaction.rollback();
+             return false;
+        }
    }
 
    @Override

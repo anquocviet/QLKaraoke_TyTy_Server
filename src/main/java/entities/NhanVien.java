@@ -81,6 +81,10 @@ public class NhanVien implements Serializable {
    @ToString.Exclude
    private Set<PhieuDatPhong> listPhieuDatPhong;
 
+   public NhanVien(String maNhanVien) {
+      this.maNhanVien = maNhanVien;
+   }
+
    public NhanVien(String maNhanVien, String hoTen, String cccd, Integer soDienThoai, Instant ngaySinh, String diaChi, Integer gioiTinh, Enum_ChucVu chucVu, Enum_TrangThaiLamViec trangThai, String anhDaiDien) {
       this.maNhanVien = maNhanVien;
       this.hoTen = hoTen;
