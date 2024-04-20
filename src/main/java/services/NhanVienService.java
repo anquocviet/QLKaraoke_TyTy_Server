@@ -2,6 +2,7 @@ package services;
 
 import entities.NhanVien;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import repositories.NhanVienRepository;
 
 import java.util.List;
@@ -35,32 +36,86 @@ public class NhanVienService implements NhanVienRepository {
 
    @Override
    public NhanVien findByHoTen(String hoTen) {
-      return null;
+        return em.createNamedQuery("NhanVien.findByHoTen", NhanVien.class)
+                .setParameter("hoTen", hoTen)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
    }
 
    @Override
    public NhanVien findByCCCD(String cccd) {
-      return null;
+        return em.createNamedQuery("NhanVien.findByCCCD", NhanVien.class)
+                .setParameter("cccd", cccd)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
    }
 
    @Override
-   public NhanVien findBySoDienThoai(String soDienThoai) {
-      return null;
+   public NhanVien findBySoDienThoai(int soDienThoai) {
+        return em.createNamedQuery("NhanVien.findBySoDienThoai", NhanVien.class)
+                .setParameter("soDienThoai", soDienThoai)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
    }
 
    @Override
    public boolean addEmployee(NhanVien nhanVien) {
-      return false;
+      EntityTransaction transaction = null;
+      try {
+         transaction = em.getTransaction();
+         transaction.begin();
+         em.persist(nhanVien); // Thêm mới nhân viên vào cơ sở dữ liệu
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+         }
+         e.printStackTrace();
+         return false;
+      }
    }
 
    @Override
    public boolean updateEmployee(NhanVien nhanVien) {
-      return false;
+      EntityTransaction transaction = null;
+      try {
+         transaction = em.getTransaction();
+         transaction.begin();
+         em.merge(nhanVien); // Cập nhật thông tin nhân viên trong cơ sở dữ liệu
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+         }
+         e.printStackTrace();
+         return false;
+      }
    }
 
    @Override
    public boolean deleteEmployee(String maNhanVien) {
-      return false;
+      EntityTransaction transaction = null;
+      try {
+         transaction = em.getTransaction();
+         transaction.begin();
+         NhanVien nhanVien = em.find(NhanVien.class, maNhanVien); // Tìm nhân viên theo mã nhân viên
+         if (nhanVien != null) {
+            em.remove(nhanVien); // Xóa nhân viên khỏi cơ sở dữ liệu
+         }
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+         }
+         e.printStackTrace();
+         return false;
+      }
    }
 
    public void close() {

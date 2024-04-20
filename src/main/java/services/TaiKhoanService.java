@@ -2,7 +2,9 @@ package services;
 
 import entities.TaiKhoan;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.Query;
 import repositories.TaiKhoanRepository;
 
 import java.util.List;
@@ -22,37 +24,83 @@ public class TaiKhoanService implements TaiKhoanRepository {
 
    @Override
    public TaiKhoan findByMaTaiKhoan(String maTaiKhoan) {
-      return null;
+      return em.find(TaiKhoan.class, maTaiKhoan);
    }
 
    @Override
    public List<TaiKhoan> findAll() {
-      return List.of();
+        return em.createNamedQuery("TaiKhoan.findAll").getResultList();
    }
 
    @Override
    public TaiKhoan findByName(String tenDangNhap) {
-      return null;
+      Query query = em.createQuery("SELECT t FROM TaiKhoan t WHERE t.tenDangNhap = :tenDangNhap");
+      query.setParameter("tenDangNhap", tenDangNhap);
+      List<TaiKhoan> resultList = query.getResultList();
+      if (!resultList.isEmpty()) {
+         return resultList.get(0);
+      } else {
+         return null;
+      }
    }
 
    @Override
    public TaiKhoan findByMaNhanVien(String maNhanVien) {
-      return null;
+        return (TaiKhoan) em.createNamedQuery("TaiKhoan.findByMaNhanVien")
+                            .setParameter("maNhanVien", maNhanVien)
+                            .getResultStream()
+                            .findFirst().orElse(null);
    }
 
    @Override
    public boolean addTaiKhoan(TaiKhoan taiKhoan) {
-      return false;
+        try {
+             em.getTransaction().begin();
+             em.persist(taiKhoan);
+             em.getTransaction().commit();
+             return true;
+        } catch (Exception e) {
+             em.getTransaction().rollback();
+             return false;
+        }
    }
 
    @Override
    public boolean updateTaiKhoan(TaiKhoan taiKhoan) {
-      return false;
+      EntityTransaction transaction = null;
+      try {
+         transaction = em.getTransaction();
+         transaction.begin();
+         em.merge(taiKhoan); // Cập nhật thông tin tài khoản
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         if (transaction != null && transaction.isActive()) {
+            transaction.rollback();
+         }
+         e.printStackTrace();
+         return false;
+      }
    }
 
    @Override
    public boolean deleteTaiKhoan(String maTaiKhoan) {
-      return false;
+        EntityTransaction transaction = null;
+        try {
+             transaction = em.getTransaction();
+             transaction.begin();
+             TaiKhoan taiKhoan = em.find(TaiKhoan.class, maTaiKhoan);
+             em.remove(taiKhoan);
+             transaction.commit();
+             return true;
+        } catch (Exception e) {
+             if (transaction != null && transaction.isActive()) {
+                transaction.rollback();
+             }
+             e.printStackTrace();
+             return false;
+        }
+
    }
 
    @Override

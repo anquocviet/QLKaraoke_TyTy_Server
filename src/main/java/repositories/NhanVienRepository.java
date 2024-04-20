@@ -19,7 +19,7 @@ public interface NhanVienRepository {
 
    public NhanVien findByCCCD(String cccd);
 
-   public NhanVien findBySoDienThoai(String soDienThoai);
+   public NhanVien findBySoDienThoai(int soDienThoai);
 
    public boolean addEmployee(NhanVien nhanVien);
 
