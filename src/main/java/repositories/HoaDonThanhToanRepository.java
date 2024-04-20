@@ -23,9 +23,11 @@ public interface HoaDonThanhToanRepository {
 
    public List<HoaDonThanhToan> findBill(LocalDate date);
 
-   public List<HoaDonThanhToan> findByRoomID(String roomID);
+   public HoaDonThanhToan findByRoomUsing(String roomID);
 
    public List<HoaDonThanhToan> findByCustomerID(String customerID);
+
+   public HoaDonThanhToan findByCustomerUsingRoom(String customerID);
 
    public List<HoaDonThanhToan> findByEmployeeID(String employeeID);
 

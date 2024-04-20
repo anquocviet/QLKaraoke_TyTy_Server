@@ -91,10 +91,11 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public List<HoaDonThanhToan> findByRoomID(String roomID) {
-      return em.createNamedQuery("HoaDonThanhToan.findByMaPhong")
+   public HoaDonThanhToan findByRoomUsing(String roomID) {
+      return (HoaDonThanhToan) em.createNamedQuery("HoaDonThanhToan.findByMaPhongDangSuDung")
                    .setParameter("maPhong", roomID)
-                   .getResultList();
+                   .getResultStream()
+                   .findFirst().orElse(null);
    }
 
    @Override
@@ -102,6 +103,14 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
       return em.createNamedQuery("HoaDonThanhToan.findByMaKhachHang")
                    .setParameter("maKhachHang", customerID)
                    .getResultList();
+   }
+
+   @Override
+   public HoaDonThanhToan findByCustomerUsingRoom(String customerID) {
+      return (HoaDonThanhToan) em.createNamedQuery("HoaDonThanhToan.findByMaKhachHangDangSuDung")
+                   .setParameter("maKhachHang", customerID)
+                   .getResultStream()
+                   .findFirst().orElse(null);
    }
 
    @Override

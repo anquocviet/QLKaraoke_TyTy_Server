@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +17,7 @@ import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -67,5 +69,18 @@ public class Phong implements Serializable {
       this.tinhTrang = tinhTrang;
       this.sucChua = sucChua;
       this.giaPhong = giaPhong;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Phong phong = (Phong) o;
+      return Objects.equals(maPhong, phong.maPhong);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maPhong);
    }
 }

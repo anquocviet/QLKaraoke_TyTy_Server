@@ -21,5 +21,7 @@ public interface DichVuRepository {
 
    public DichVu findDichVuById(String maDichVu);
 
+   public List<DichVu> findListDichVuByMaHoaDon(String maHoaDon);
+
    public int countDichVu();
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -35,22 +37,23 @@ public class PhieuDatPhong implements Serializable {
    private static final long serialVersionUID = -6562395586172805484L;
 
    @Id
+   @EqualsAndHashCode.Include
    @Column(name = "MaPhieuDat", nullable = false)
    private String maPhieuDat;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaPhong")
    @ToString.Exclude
    private Phong phong;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhachHang")
    @ToString.Exclude
    private KhachHang khachHang;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude
@@ -77,5 +80,18 @@ public class PhieuDatPhong implements Serializable {
       this.thoiGianNhan = thoiGianNhan;
       this.ghiChu = ghiChu;
       this.tinhTrang = tinhTrang;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      PhieuDatPhong that = (PhieuDatPhong) o;
+      return Objects.equals(maPhieuDat, that.maPhieuDat);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maPhieuDat);
    }
 }
