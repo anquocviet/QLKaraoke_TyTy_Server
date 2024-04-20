@@ -60,7 +60,8 @@ public class TaiKhoanService implements TaiKhoanRepository {
       return (TaiKhoan) em.createNamedQuery("TaiKhoan.login")
                               .setParameter("tenDangNhap", account.getTenDangNhap())
                               .setParameter("matKhau", account.getMatKhau())
-                              .getSingleResult();
+                              .getResultStream()
+                              .findFirst().orElse(null);
    }
 
    public void close() {

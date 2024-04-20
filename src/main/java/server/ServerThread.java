@@ -1,11 +1,13 @@
 package server;
 
+import entities.CT_KhuyenMai;
 import entities.DichVu;
 import entities.HoaDonThanhToan;
 import entities.PhieuDatPhong;
 import entities.Phong;
 import entities.TaiKhoan;
 import lombok.SneakyThrows;
+import repositories.CT_KhuyenMaiRepository;
 import repositories.ChiTietHD_DichVuRepository;
 import repositories.DichVuRepository;
 import repositories.HoaDonThanhToanRepository;
@@ -13,6 +15,7 @@ import repositories.NhanVienRepository;
 import repositories.PhieuDatPhongRepository;
 import repositories.PhongRepository;
 import repositories.TaiKhoanRepository;
+import services.CT_KhuyenMaiService;
 import services.ChiTietHD_DichVuService;
 import services.DichVuService;
 import services.HoaDonThanhToanService;
@@ -48,6 +51,7 @@ public class ServerThread implements Runnable {
    private final DichVuRepository serviceService;
    private final HoaDonThanhToanRepository billService;
    private final ChiTietHD_DichVuRepository serviceDetailService;
+   private final CT_KhuyenMaiRepository voucherService;
 
    public ServerThread(Socket socket) {
       this.socket = socket;
@@ -58,6 +62,7 @@ public class ServerThread implements Runnable {
       serviceService = new DichVuService();
       billService = new HoaDonThanhToanService();
       serviceDetailService = new ChiTietHD_DichVuService();
+      voucherService = new CT_KhuyenMaiService();
    }
 
    @Override
@@ -83,12 +88,30 @@ public class ServerThread implements Runnable {
                case "service" -> serviceController(line);
                case "bill" -> billController(line);
                case "serviceDetail" -> serviceDetailController(line);
+               case "voucher" -> voucherController(line);
                default -> out.flush();
             }
          }
 
       } catch (IOException e) {
          throw new RuntimeException(e);
+      }
+   }
+
+   @SneakyThrows
+   private void voucherController(String line) {
+      if (line.equals("find-all-voucher")) {
+         out.writeObject(voucherService.findAll());
+      } else if (line.matches("find-by-id,.*")) {
+         out.writeObject(null);
+      } else if (line.equals("update-voucher")) {
+         out.writeBoolean(false);
+      } else if (line.equals("delete-voucher")) {
+         out.writeBoolean(false);
+      } else if (line.equals("add-voucher")) {
+         out.writeBoolean(false);
+      } else if (line.equals("count-voucher")) {
+         dos.writeUTF("0");
       }
    }
 
