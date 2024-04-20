@@ -13,15 +13,14 @@ import java.util.List;
 public interface KhachHangRepository {
    public List<KhachHang> findAll();
 
-   public KhachHang findByMaKhachHang(String maKhachHang);
+   public List<KhachHang> findByMaKhachHang(String maKhachHang);
 
-   public KhachHang findByTenKhachHang(String tenKhachHang);
+   public List<KhachHang> findByTenKhachHang(String tenKhachHang) ;
 
-   public KhachHang findBySoDienThoai(Integer soDienThoai);
+   public List<KhachHang> findBySoDienThoai(String soDienThoai);
 
    public boolean addCustomer(KhachHang khachHang);
 
    public boolean updateCustomer(KhachHang khachHang);
 
-   public boolean deleteCustomer(KhachHang khachHang);
 }

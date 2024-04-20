@@ -23,10 +23,14 @@ import java.util.Set;
 @ToString
 @Entity
 @NamedQueries({
-      @NamedQuery(name = "KhachHang.findAll", query = "SELECT kh FROM KhachHang kh"),
-      @NamedQuery(name = "KhachHang.findByMaKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.maKhachHang = :maKhachHang"),
-      @NamedQuery(name = "KhachHang.findByTenKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.tenKhachHang = :tenKhachHang"),
-      @NamedQuery(name = "KhachHang.findBySoDienThoai", query = "SELECT kh FROM KhachHang kh WHERE kh.soDienThoai = :soDienThoai"),
+        @NamedQuery(name = "KhachHang.findAll", query = "SELECT kh FROM KhachHang kh"),
+        @NamedQuery(name = "KhachHang.findByMaKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.maKhachHang LIKE :maKhachHang"),
+//      @NamedQuery(name = "KhachHang.findByTenKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.tenKhachHang = :tenKhachHang"),
+        @NamedQuery(name = "KhachHang.findByTenKhachHang", query = "SELECT kh FROM KhachHang kh WHERE kh.tenKhachHang LIKE :tenKhachHang"),
+        @NamedQuery(name = "KhachHang.findBySoDienThoai", query = "SELECT kh FROM KhachHang kh WHERE CAST(kh.soDienThoai AS string) LIKE :soDienThoai"),
+        @NamedQuery(name = "KhachHang.update",
+                     query = "UPDATE KhachHang kh SET kh.tenKhachHang = :tenKhachHang, kh.soDienThoai = :soDienThoai, kh.namSinh = :namSinh, kh.gioiTinh = :gioiTinh WHERE kh.maKhachHang = :maKhachHang")
+
 })
 public class KhachHang implements Serializable {
    @Serial

@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class DichVuService implements DichVuRepository {
    private EntityManager em = null;
+   EntityTransaction transaction = null;
    private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
 
    public DichVuService() {
@@ -23,41 +24,60 @@ public class DichVuService implements DichVuRepository {
 
    @Override
    public boolean addDichVu(DichVu dv) {
-      return false;
-   }
+    EntityTransaction transaction = em.getTransaction();
+    try {
 
+        transaction.begin();
+        em.persist(dv);
+        transaction.commit();
+        return true;
+    } catch (Exception e) {
+        if (transaction.isActive()) {
+            transaction.rollback();
+        }
+        e.printStackTrace();
+        return false;
+    }
+}
+
+//   @Override
+//   public boolean capNhatSoLuongDichVu(DichVu dv) {
+//      try {
+//         transaction.begin();
+//         em.createNamedQuery("DichVu.updateSoLuongTon")
+//                 .setParameter("soLuongTon", dv.getSoLuongTon())
+//                 .setParameter("maDichVu", dv.getMaDichVu())
+//                 .executeUpdate();
+//         transaction.commit();
+//         return true;
+//      } catch (Exception e) {
+//         transaction.rollback();
+//         e.printStackTrace();
+//      }
+//        return false;
+//   }
    @Override
    public boolean updateDichVu(DichVu dv) {
-      EntityTransaction transaction = em.getTransaction();
-      try {
-         transaction.begin();
-         if (em.find(DichVu.class, dv.getMaDichVu()) == null) {
-            return false;
-         }
-         em.merge(dv);
-         transaction.commit();
-         return true;
-      } catch (Exception e) {
-         transaction.rollback();
-         e.printStackTrace();
-      }
-      return false;
+       EntityTransaction transaction = em.getTransaction();
+        try {
+             transaction.begin();
+             em.createNamedQuery("DichVu.updateThongTinDichVu")
+                     .setParameter("tenDichVu", dv.getTenDichVu())
+                     .setParameter("soLuongTon", dv.getSoLuongTon())
+                     .setParameter("donViTinh", dv.getDonViTinh())
+                     .setParameter("donGia", dv.getDonGia())
+                     .setParameter("anhMinhHoa", dv.getAnhMinhHoa())
+                     .setParameter("maDichVu", dv.getMaDichVu())
+                     .executeUpdate();
+             transaction.commit();
+             return true;
+        } catch (Exception e) {
+             transaction.rollback();
+             e.printStackTrace();
+        }
+        return false;
    }
 
-   @Override
-   public boolean deleteDichVu(DichVu dv) {
-      EntityTransaction transaction = em.getTransaction();
-      try {
-         transaction.begin();
-         em.remove(dv);
-         transaction.commit();
-         return true;
-      } catch (Exception e) {
-         transaction.rollback();
-         e.printStackTrace();
-      }
-      return false;
-   }
 
    @Override
    public List<DichVu> findAllDichVu() {
@@ -65,8 +85,10 @@ public class DichVuService implements DichVuRepository {
    }
 
    @Override
-   public DichVu findDichVuById(String maDichVu) {
-      return null;
+   public List<DichVu> findDichVuById(String maDichVu) {
+      return em.createNamedQuery("DichVu.findByMaDichVu", DichVu.class)
+               .setParameter("maDichVu","%" + maDichVu + "%")
+               .getResultList();
    }
 
    @Override
@@ -76,8 +98,27 @@ public class DichVuService implements DichVuRepository {
                .getResultList();
    }
 
-   @Override
-   public int countDichVu() {
-      return 0;
-   }
+
+
+@Override
+    public Long countDichVu() {
+        return em.createNamedQuery("DichVu.countAll", Long.class).getSingleResult();
+    }
+
+    @Override
+    public boolean deleteDichVu(DichVu dv) {
+        EntityTransaction transaction = em.getTransaction();
+        try {
+            transaction.begin();
+            em.remove(em.find(DichVu.class, dv));
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

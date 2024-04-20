@@ -27,10 +27,11 @@ import java.util.Set;
 @Table(name = "CT_KhuyenMai")
 @NamedQueries({
       @NamedQuery(name = "CT_Khuyenmai.findAll", query = "SELECT k FROM CT_KhuyenMai k"),
-      @NamedQuery(name = "CT_Khuyenmai.findByMaKhuyenMai", query = "SELECT k FROM CT_KhuyenMai k WHERE k.maKhuyenMai = :maKhuyenMai"),
-      @NamedQuery(name = "CT_Khuyenmai.findByTenKhuyenMai", query = "SELECT k FROM CT_KhuyenMai k WHERE k.tenKhuyenMai = :tenKhuyenMai"),
-      @NamedQuery(name = "CT_Khuyenmai.deleteByMaKhuyenMai", query = "DELETE FROM CT_KhuyenMai k WHERE k.maKhuyenMai = :maKhuyenMai"),
-      @NamedQuery(name = "CT_Khuyenmai.updateLuotSuDungConLai", query = "UPDATE CT_KhuyenMai k SET k.luotSuDungConLai = :luotSuDungConLai WHERE k.maKhuyenMai = :maKhuyenMai")
+      @NamedQuery(name = "CT_KhuyenMai.findByMaKhuyenMai", query = "SELECT k FROM CT_KhuyenMai k WHERE k.maKhuyenMai LIKE :maKhuyenMai"),
+      @NamedQuery(name = "CT_KhuyenMai.findByTenKhuyenMai", query = "SELECT k FROM CT_KhuyenMai k WHERE k.tenKhuyenMai LIKE :tenKhuyenMai"),
+      @NamedQuery(name = "CT_KhuyenMai.deleteByMaKhuyenMai", query = "DELETE FROM CT_KhuyenMai k WHERE k.maKhuyenMai = :maKhuyenMai"),
+      @NamedQuery(name = "CT_KhuyenMai.update",
+            query = "UPDATE CT_KhuyenMai k SET k.tenKhuyenMai = :tenKhuyenMai, k.ngayBatDau = :ngayBatDau, k.ngayKetThuc = :ngayKetThuc, k.luotSuDungConLai = :luotSuDungConLai, k.chietKhau = :chietKhau WHERE k.maKhuyenMai = :maKhuyenMai")
 
 })
 public class CT_KhuyenMai implements Serializable {
