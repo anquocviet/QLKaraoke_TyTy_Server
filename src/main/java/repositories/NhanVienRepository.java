@@ -15,11 +15,11 @@ public interface NhanVienRepository {
 
    public NhanVien findByMaNhanVien(String maNhanVien);
 
-   public NhanVien findByHoTen(String hoTen);
+   public List<NhanVien> findByHoTen(String hoTen);
 
    public NhanVien findByCCCD(String cccd);
 
-   public NhanVien findBySoDienThoai(int soDienThoai);
+   public List<NhanVien> findBySoDienThoai(int soDienThoai);
 
    public boolean addEmployee(NhanVien nhanVien);
 

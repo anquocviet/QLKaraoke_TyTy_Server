@@ -7,6 +7,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 import repositories.HoaDonThanhToanRepository;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,15 +21,16 @@ import java.util.stream.Collectors;
  */
 public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    private EntityManager em = null;
+   private EntityTransaction transaction = null;
    private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
 
    public HoaDonThanhToanService() {
       em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
+      transaction = em.getTransaction();
    }
 
    @Override
    public boolean addHoaDonThanhToan(HoaDonThanhToan bill) {
-      EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
          em.persist(bill);
@@ -43,7 +45,6 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
 
    @Override
    public boolean updateHoaDonThanhToan(HoaDonThanhToan bill) {
-      EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
          if (em.find(HoaDonThanhToan.class, bill.getMaHoaDon()) == null) {
@@ -61,7 +62,6 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
 
    @Override
    public boolean deleteHoaDonThanhToan(String billID) {
-      EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
          HoaDonThanhToan bill = em.find(HoaDonThanhToan.class, billID);
@@ -84,7 +84,12 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public List<HoaDonThanhToan> findBill(LocalDate date) {
+   public HoaDonThanhToan findBill(String billID) {
+      return em.find(HoaDonThanhToan.class, billID);
+   }
+
+   @Override
+   public List<HoaDonThanhToan> findBill(Instant date) {
       return em.createNamedQuery("HoaDonThanhToan.findByNgayLap")
                    .setParameter("ngayLap", date)
                    .getResultList();
@@ -93,9 +98,9 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    @Override
    public HoaDonThanhToan findByRoomUsing(String roomID) {
       return (HoaDonThanhToan) em.createNamedQuery("HoaDonThanhToan.findByMaPhongDangSuDung")
-                   .setParameter("maPhong", roomID)
-                   .getResultStream()
-                   .findFirst().orElse(null);
+                                     .setParameter("maPhong", roomID)
+                                     .getResultStream()
+                                     .findFirst().orElse(null);
    }
 
    @Override
@@ -108,9 +113,9 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    @Override
    public HoaDonThanhToan findByCustomerUsingRoom(String customerID) {
       return (HoaDonThanhToan) em.createNamedQuery("HoaDonThanhToan.findByMaKhachHangDangSuDung")
-                   .setParameter("maKhachHang", customerID)
-                   .getResultStream()
-                   .findFirst().orElse(null);
+                                     .setParameter("maKhachHang", customerID)
+                                     .getResultStream()
+                                     .findFirst().orElse(null);
    }
 
    @Override
@@ -130,11 +135,11 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    public int countBill(String customerID) {
       return em.createNamedQuery("HoaDonThanhToan.countBillByMaKhachHang")
                    .setParameter("maKhachHang", customerID)
-                   .getFirstResult();
+                     .getFirstResult();
    }
 
    @Override
-   public Map<Integer, Integer> getBillsByDate(LocalDate date, String type) {
+   public Map<Integer, Integer> getBillsByDate(Instant date, String type) {
       TypedQuery<Object[]> namedQuery = switch (type) {
          case "day" -> em.createNamedQuery("HoaDonThanhToan.getBillsByDay", Object[].class);
          case "month" -> em.createNamedQuery("HoaDonThanhToan.getBillsByMonth", Object[].class);
@@ -159,7 +164,7 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public long calcMoney(LocalDate date, String type) {
+   public long calcMoney(Instant date, String type) {
       TypedQuery<Long> namedQuery = switch (type) {
          case "day" -> em.createNamedQuery("HoaDonThanhToan.calcMoneyByNgayLap", Long.class);
          case "month" -> em.createNamedQuery("HoaDonThanhToan.calcMoneyByMonth", Long.class);

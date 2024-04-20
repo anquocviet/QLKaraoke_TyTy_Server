@@ -3,6 +3,7 @@ package services;
 import entities.NhanVien;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Persistence;
 import repositories.NhanVienRepository;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class NhanVienService implements NhanVienRepository {
    private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
 
    public NhanVienService() {
-      em = jakarta.persistence.Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
+      em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME).createEntityManager();
    }
 
    @Override
@@ -28,37 +29,35 @@ public class NhanVienService implements NhanVienRepository {
    @Override
    public NhanVien findByMaNhanVien(String maNhanVien) {
       return em.createNamedQuery("NhanVien.findByMaNhanVien", NhanVien.class)
-                   .setParameter("maNhanVien", maNhanVien)
+                   .setParameter("maNhanVien", "%" + maNhanVien + "%")
                    .getResultStream()
                    .findFirst()
                    .orElse(null);
    }
 
    @Override
-   public NhanVien findByHoTen(String hoTen) {
-        return em.createNamedQuery("NhanVien.findByHoTen", NhanVien.class)
-                .setParameter("hoTen", hoTen)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+   public List<NhanVien> findByHoTen(String hoTen) {
+      return em.createNamedQuery("NhanVien.findByHoTen", NhanVien.class)
+                   .setParameter("hoTen", hoTen)
+                   .getResultStream()
+                   .toList();
    }
 
    @Override
    public NhanVien findByCCCD(String cccd) {
-        return em.createNamedQuery("NhanVien.findByCCCD", NhanVien.class)
-                .setParameter("cccd", cccd)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+      return em.createNamedQuery("NhanVien.findByCCCD", NhanVien.class)
+                   .setParameter("cccd", cccd)
+                   .getResultStream()
+                   .findFirst()
+                   .orElse(null);
    }
 
    @Override
-   public NhanVien findBySoDienThoai(int soDienThoai) {
-        return em.createNamedQuery("NhanVien.findBySoDienThoai", NhanVien.class)
-                .setParameter("soDienThoai", soDienThoai)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+   public List<NhanVien> findBySoDienThoai(int soDienThoai) {
+      return em.createNamedQuery("NhanVien.findBySoDienThoai", NhanVien.class)
+                   .setParameter("soDienThoai", soDienThoai)
+                   .getResultStream()
+                   .toList();
    }
 
    @Override

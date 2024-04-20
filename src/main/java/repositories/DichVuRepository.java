@@ -19,9 +19,9 @@ public interface DichVuRepository {
 
    public List<DichVu> findAllDichVu();
 
-   public List<DichVu> findDichVuById(String maDichVu);
+   public DichVu findDichVu(String maDichVu);
 
    public List<DichVu> findListDichVuByMaHoaDon(String maHoaDon);
 
-   public int countDichVu();
+   public Long countDichVu();
 }

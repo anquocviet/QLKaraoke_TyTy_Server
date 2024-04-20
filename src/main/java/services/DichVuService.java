@@ -78,22 +78,23 @@ public class DichVuService implements DichVuRepository {
    }
 
    @Override
-   public List<DichVu> findDichVuById(String maDichVu) {
+   public DichVu findDichVu(String maDichVu) {
       return em.createQuery("SELECT d FROM DichVu d WHERE d.maDichVu LIKE :maDichVu", DichVu.class)
-              .setParameter("maDichVu", "%" + maDichVu + "%")
-              .getResultList();
+                   .setParameter("maDichVu", "%" + maDichVu + "%")
+                   .getResultStream()
+                   .findFirst().orElse(null);
    }
 
    @Override
    public List<DichVu> findListDichVuByMaHoaDon(String maHoaDon) {
       return em.createNamedQuery("DichVu.findListDichVuByMaHoaDon", DichVu.class)
-               .setParameter("maHoaDon", maHoaDon)
-               .getResultList();
+                   .setParameter("maHoaDon", maHoaDon)
+                   .getResultList();
    }
 
    @Override
-   public int countDichVu() {
-      return 0;
+   public Long countDichVu() {
+      return em.createNamedQuery("DichVu.countAll", Long.class).getSingleResult();
    }
 
    public void close() {
