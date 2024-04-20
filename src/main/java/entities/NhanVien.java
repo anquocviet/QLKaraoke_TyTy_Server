@@ -33,11 +33,15 @@ import java.util.Set;
       @NamedQuery(name = "NhanVien.findByHoTen", query = "SELECT nv FROM NhanVien nv WHERE nv.hoTen = :hoTen"),
       @NamedQuery(name = "NhanVien.findByCCCD", query = "SELECT nv FROM NhanVien nv WHERE nv.cccd = :cccd"),
       @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE nv.soDienThoai = :soDienThoai"),
-
 })
+
 public class NhanVien implements Serializable {
    @Serial
    private static final long serialVersionUID = 4231211857730583614L;
+
+   public NhanVien(String maNhanVien) {
+      this.maNhanVien = maNhanVien;
+   }
 
    @Id
    @EqualsAndHashCode.Include

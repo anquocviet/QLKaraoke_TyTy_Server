@@ -25,6 +25,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Entity
+
 @NamedQueries({
       @NamedQuery(name = "TaiKhoan.findByMaTaiKhoan", query = "SELECT tk FROM TaiKhoan tk WHERE tk.maTaiKhoan = :maTaiKhoan"),
       @NamedQuery(name = "TaiKhoan.findAll", query = "SELECT tk FROM TaiKhoan tk"),
