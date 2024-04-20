@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.ToString;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -31,6 +33,7 @@ public class KhachHang implements Serializable {
    private static final long serialVersionUID = 2141924125267023221L;
 
    @Id
+   @EqualsAndHashCode.Include
    @Column(name = "MaKhachHang", nullable = false)
    private String maKhachHang;
 
@@ -60,5 +63,18 @@ public class KhachHang implements Serializable {
       this.soDienThoai = soDienThoai;
       this.namSinh = namSinh;
       this.gioiTinh = gioiTinh;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      KhachHang khachHang = (KhachHang) o;
+      return Objects.equals(maKhachHang, khachHang.maKhachHang);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maKhachHang);
    }
 }

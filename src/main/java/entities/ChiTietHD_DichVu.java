@@ -38,14 +38,14 @@ public class ChiTietHD_DichVu implements Serializable {
    private ChiTietHD_DichVuId id;
 
    @MapsId("maHoaDon")
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaHoaDon", nullable = false)
    @ToString.Exclude
    private HoaDonThanhToan hoaDon;
 
    @MapsId("maDichVu")
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaDichVu", nullable = false)
    @ToString.Exclude

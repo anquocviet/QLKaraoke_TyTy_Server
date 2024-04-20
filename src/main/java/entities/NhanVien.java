@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import lombok.ToString;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -38,6 +40,7 @@ public class NhanVien implements Serializable {
    private static final long serialVersionUID = 4231211857730583614L;
 
    @Id
+   @EqualsAndHashCode.Include
    @Column(name = "MaNhanVien", nullable = false)
    private String maNhanVien;
 
@@ -89,5 +92,18 @@ public class NhanVien implements Serializable {
       this.chucVu = chucVu;
       this.trangThai = trangThai;
       this.anhDaiDien = anhDaiDien;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      NhanVien nhanVien = (NhanVien) o;
+      return Objects.equals(maNhanVien, nhanVien.maNhanVien);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maNhanVien);
    }
 }

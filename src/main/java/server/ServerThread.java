@@ -1,9 +1,21 @@
 package server;
 
+import entities.DichVu;
+import entities.HoaDonThanhToan;
 import entities.PhieuDatPhong;
 import entities.Phong;
 import entities.TaiKhoan;
 import lombok.SneakyThrows;
+import repositories.ChiTietHD_DichVuRepository;
+import repositories.DichVuRepository;
+import repositories.HoaDonThanhToanRepository;
+import repositories.NhanVienRepository;
+import repositories.PhieuDatPhongRepository;
+import repositories.PhongRepository;
+import repositories.TaiKhoanRepository;
+import services.ChiTietHD_DichVuService;
+import services.DichVuService;
+import services.HoaDonThanhToanService;
 import services.NhanVienService;
 import services.PhieuDatPhongService;
 import services.PhongService;
@@ -29,10 +41,13 @@ public class ServerThread implements Runnable {
    private DataOutputStream dos;
    private ObjectInputStream in;
    private ObjectOutputStream out;
-   private final TaiKhoanService accountService;
-   private final PhongService roomService;
-   private final PhieuDatPhongService bookingTicketService;
-   private final NhanVienService employeeService;
+   private final TaiKhoanRepository accountService;
+   private final PhongRepository roomService;
+   private final PhieuDatPhongRepository bookingTicketService;
+   private final NhanVienRepository employeeService;
+   private final DichVuRepository serviceService;
+   private final HoaDonThanhToanRepository billService;
+   private final ChiTietHD_DichVuRepository serviceDetailService;
 
    public ServerThread(Socket socket) {
       this.socket = socket;
@@ -40,6 +55,9 @@ public class ServerThread implements Runnable {
       roomService = new PhongService();
       bookingTicketService = new PhieuDatPhongService();
       employeeService = new NhanVienService();
+      serviceService = new DichVuService();
+      billService = new HoaDonThanhToanService();
+      serviceDetailService = new ChiTietHD_DichVuService();
    }
 
    @Override
@@ -62,12 +80,57 @@ public class ServerThread implements Runnable {
                case "account" -> accountController(line);
                case "bookingTicket" -> bookingTicketController(line);
                case "employee" -> employeeController(line);
+               case "service" -> serviceController(line);
+               case "bill" -> billController(line);
+               case "serviceDetail" -> serviceDetailController(line);
                default -> out.flush();
             }
          }
 
       } catch (IOException e) {
          throw new RuntimeException(e);
+      }
+   }
+
+   @SneakyThrows
+   private void serviceDetailController(String line) {
+      if (line.matches("find-by-bill-id,.*")) {
+         out.writeObject(serviceDetailService.findByMaHoaDon(line.split(",")[1]));
+      } else if (line.equals("add-serviceDetail")) {
+         boolean result = serviceDetailService.addChiTietHD_DichVu((entities.ChiTietHD_DichVu) in.readObject());
+         out.writeBoolean(result);
+      } else if (line.equals("update-serviceDetail")) {
+         boolean result = serviceDetailService.updateChiTietHD_DichVu((entities.ChiTietHD_DichVu) in.readObject());
+         out.writeBoolean(result);
+      }
+   }
+
+   @SneakyThrows
+   private void billController(String line) {
+      if (line.matches("find-bill-by-room-id,.*")) {
+         HoaDonThanhToan bill = billService.findByRoomUsing(line.split(",")[1]);
+         out.writeObject(bill);
+      }
+   }
+
+   @SneakyThrows
+   private void serviceController(String line) {
+      if (line.equals("find-all-service")) {
+         out.writeObject(serviceService.findAllDichVu());
+      } else if (line.matches("find-service,.*")) {
+         out.writeObject(null);
+      } else if (line.equals("update-service")) {
+         boolean result = serviceService.updateDichVu((DichVu) in.readObject());
+         out.writeBoolean(result);
+      } else if (line.equals("delete-service")) {
+         boolean result = serviceService.deleteDichVu((DichVu) in.readObject());
+         out.writeBoolean(result);
+      } else if (line.equals("add-service")) {
+         out.writeBoolean(false);
+      } else if (line.equals("count-service")) {
+         dos.writeUTF("0");
+      } else if (line.matches("service-find-by-bill-id,.*")) {
+         out.writeObject(serviceService.findListDichVuByMaHoaDon(line.split(",")[1]));
       }
    }
 

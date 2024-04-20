@@ -7,6 +7,7 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.ToString;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -37,6 +39,7 @@ public class CT_KhuyenMai implements Serializable {
 
    @Id
    @Column(name = "MaKhuyenMai", nullable = false)
+   @EqualsAndHashCode.Include
    private String maKhuyenMai;
 
    @Column(name = "TenKhuyenMai")
@@ -65,5 +68,18 @@ public class CT_KhuyenMai implements Serializable {
       this.ngayKetThuc = ngayKetThuc;
       this.luotSuDungConLai = luotSuDungConLai;
       this.chietKhau = chietKhau;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      CT_KhuyenMai that = (CT_KhuyenMai) o;
+      return Objects.equals(maKhuyenMai, that.maKhuyenMai);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maKhuyenMai);
    }
 }

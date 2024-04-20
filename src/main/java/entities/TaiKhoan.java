@@ -14,9 +14,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -55,5 +57,18 @@ public class TaiKhoan implements Serializable {
       this.tenDangNhap = tenDangNhap;
       this.matKhau = matKhau;
       this.nhanVien = nhanVien;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      TaiKhoan taiKhoan = (TaiKhoan) o;
+      return Objects.equals(maTaiKhoan, taiKhoan.maTaiKhoan);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maTaiKhoan);
    }
 }

@@ -45,14 +45,14 @@ public class ChiTietHD_Phong implements Serializable {
    private ChiTietHD_PhongId id;
 
    @MapsId("maHoaDon")
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaHoaDon", nullable = false)
    @ToString.Exclude
    private HoaDonThanhToan hoaDon;
 
    @MapsId("maPhong")
-   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+   @ManyToOne(fetch = FetchType.EAGER, optional = false)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaPhong", nullable = false)
    @ToString.Exclude

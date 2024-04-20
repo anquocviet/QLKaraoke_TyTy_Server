@@ -11,7 +11,7 @@
  Target Server Version : 110302 (11.3.2-MariaDB)
  File Encoding         : 65001
 
- Date: 01/04/2024 22:26:16
+ Date: 19/04/2024 18:57:29
 */
 
 SET NAMES utf8mb4;
@@ -50,7 +50,10 @@ CREATE TABLE `ChiTietHD_DichVu` (
   `MaDichVu` varchar(255) NOT NULL,
   `SoLuong` int(11) DEFAULT NULL,
   `ThanhTien` int(11) DEFAULT NULL,
-  PRIMARY KEY (`MaHoaDon`,`MaDichVu`)
+  PRIMARY KEY (`MaHoaDon`,`MaDichVu`),
+  KEY `FK15gi2qqjg8odmqwqgyr53hdqu` (`MaDichVu`),
+  CONSTRAINT `FK15gi2qqjg8odmqwqgyr53hdqu` FOREIGN KEY (`MaDichVu`) REFERENCES `DichVu` (`MaDichVu`) ON DELETE CASCADE,
+  CONSTRAINT `FK1oy8mns2y5hdafodcesrlmu06` FOREIGN KEY (`MaHoaDon`) REFERENCES `HoaDonThanhToan` (`MaHoaDon`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -130,7 +133,10 @@ CREATE TABLE `ChiTietHD_Phong` (
   `GioRa` datetime DEFAULT NULL,
   `TongGioSuDung` double DEFAULT NULL,
   `ThanhTien` int(11) DEFAULT NULL,
-  PRIMARY KEY (`MaHoaDon`,`MaPhong`)
+  PRIMARY KEY (`MaHoaDon`,`MaPhong`),
+  KEY `FKr64nicog7ht5e2hyqx69cn9dt` (`MaPhong`),
+  CONSTRAINT `FK9s4jyg6i2osm2e3kj139g4ord` FOREIGN KEY (`MaHoaDon`) REFERENCES `HoaDonThanhToan` (`MaHoaDon`) ON DELETE CASCADE,
+  CONSTRAINT `FKr64nicog7ht5e2hyqx69cn9dt` FOREIGN KEY (`MaPhong`) REFERENCES `Phong` (`MaPhong`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -258,7 +264,13 @@ CREATE TABLE `HoaDonThanhToan` (
   `MaKhuyenMai` varchar(255) DEFAULT NULL,
   `NgayLap` datetime DEFAULT NULL,
   `TongTien` int(11) DEFAULT NULL,
-  PRIMARY KEY (`MaHoaDon`)
+  PRIMARY KEY (`MaHoaDon`),
+  KEY `FKtr0ees8sx4hkdystk91j8mvb6` (`MaKhachHang`),
+  KEY `FK665s946tiwmlxv1ahg67xn4f4` (`MaKhuyenMai`),
+  KEY `FKjlo9mt0eaghxfm3qan06rpgob` (`MaNhanVien`),
+  CONSTRAINT `FK665s946tiwmlxv1ahg67xn4f4` FOREIGN KEY (`MaKhuyenMai`) REFERENCES `CT_KhuyenMai` (`MaKhuyenMai`) ON DELETE CASCADE,
+  CONSTRAINT `FKjlo9mt0eaghxfm3qan06rpgob` FOREIGN KEY (`MaNhanVien`) REFERENCES `NhanVien` (`MaNhanVien`) ON DELETE CASCADE,
+  CONSTRAINT `FKtr0ees8sx4hkdystk91j8mvb6` FOREIGN KEY (`MaKhachHang`) REFERENCES `KhachHang` (`MaKhachHang`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -383,15 +395,15 @@ CREATE TABLE `NhanVien` (
 -- Records of NhanVien
 -- ----------------------------
 BEGIN;
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0102', 'Ngô Gia Đạt', '987654321012', 901234567, '2001-11-12 00:00:00', '48 Nguyễn Tuân, P3, Gò Vấp, TP HCM', 1, 'Quản lý', 'CONLAMVIEC', 'avt_employee4.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0103', 'An Quốc Việt', '035456789012', 912345678, '2003-11-25 00:00:00', '12 Nguyễn Văn Bảo, P4, Gò Vấp, TP HCM', 1, 'Quản lý', 'Còn làm việc', 'avt_employee3.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0190', 'Nguyễn Anh Khải', '678901234567', 976543210, '1991-03-30 00:00:00', '512 Phạm Văn Đồng, P3, Gò Vấp, TP HCM', 1, 'Bảo vệ', 'CONLAMVIEC', 'avt_employee4.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0198', 'Lê Thị Mơ', '567890123456', 909876543, '1998-12-12 00:00:00', '127 Phạm Văn Đồng, Hiệp Bình Chánh, Thủ Đức', 0, 'Nhân viên tiếp tân', 'Đã nghỉ việc', 'avt_employee.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0203', 'Nguyễn Kiến Thức', '456123789012', 976543210, '2003-12-04 00:00:00', '14 Nguyễn Văn Công, P3, Gò Vấp, TP HCM', 1, 'Nhân viên tiếp tân', 'Còn làm việc', 'avt_employee5.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0290', 'Nguyễn Thị Thu Hồng', '789012345678', 987654321, '1990-04-05 00:00:00', '69 Nguyễn Kiệm, P3, Gò Vấp, TP HCM', 0, 'Nhân viên phục vụ', 'Còn làm việc', 'avt_employee10.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0303', 'Nguyễn Duy Thanh', '789321456012', 987654321, '2003-03-17 00:00:00', '224 Nguyễn Xí, P23, Bình Thạnh, TP HCM', 1, 'Nhân viên phục vụ', 'Đã nghỉ việc', 'avt_employee6.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0403', 'Nguyễn Đức Thắng', '234567890123', 954321098, '2003-06-19 00:00:00', '16 Đường 17, Phường Linh Trung, TP Thủ Đức ', 1, 'Nhân viên phục vụ', 'Còn làm việc', 'avt_employee7.jpg');
-INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0503', 'Nguyễn Văn Thạch', '345678901234', 912345678, '2003-02-23 00:00:00', '12/24 Cộng Hòa, Tân Bình, TP HCM', 1, 'Nhân viên tiếp tân', 'Còn làm việc', 'avt_employee8.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0102', 'Ngô Gia Đạt', '987654321012', 901234567, '2001-11-12 00:00:00', '48 Nguyễn Tuân, P3, Gò Vấp, TP HCM', 1, 'QUANLY', 'CONLAMVIEC', 'avt_employee4.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0103', 'An Quốc Việt', '035456789012', 912345678, '2003-11-25 00:00:00', '12 Nguyễn Văn Bảo, P4, Gò Vấp, TP HCM', 1, 'QUANLY', 'CONLAMVIEC', 'avt_employee3.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0190', 'Nguyễn Anh Khải', '678901234567', 976543210, '1991-03-30 00:00:00', '512 Phạm Văn Đồng, P3, Gò Vấp, TP HCM', 1, 'BAOVE', 'CONLAMVIEC', 'avt_employee4.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0198', 'Lê Thị Mơ', '567890123456', 909876543, '1998-12-12 00:00:00', '127 Phạm Văn Đồng, Hiệp Bình Chánh, Thủ Đức', 0, 'NHANVIENTIEPTAN', 'DANGHIVIEC', 'avt_employee.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0203', 'Nguyễn Kiến Thức', '456123789012', 976543210, '2003-12-04 00:00:00', '14 Nguyễn Văn Công, P3, Gò Vấp, TP HCM', 1, 'NHANVIENTIEPTAN', 'CONLAMVIEC', 'avt_employee5.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0290', 'Nguyễn Thị Thu Hồng', '789012345678', 987654321, '1990-04-05 00:00:00', '69 Nguyễn Kiệm, P3, Gò Vấp, TP HCM', 0, 'NHANVIENPHUCVU', 'CONLAMVIEC', 'avt_employee10.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0303', 'Nguyễn Duy Thanh', '789321456012', 987654321, '2003-03-17 00:00:00', '224 Nguyễn Xí, P23, Bình Thạnh, TP HCM', 1, 'NHANVIENTIEPTAN', 'DANGHIVIEC', 'avt_employee6.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0403', 'Nguyễn Đức Thắng', '234567890123', 954321098, '2003-06-19 00:00:00', '16 Đường 17, Phường Linh Trung, TP Thủ Đức ', 1, 'NHANVIENPHUCVU', 'CONLAMVIEC', 'avt_employee7.jpg');
+INSERT INTO `NhanVien` (`MaNhanVien`, `HoTen`, `CCCD`, `SoDienThoai`, `NgaySinh`, `DiaChi`, `GioiTinh`, `ChucVu`, `TrangThai`, `AnhDaiDien`) VALUES ('NV0503', 'Nguyễn Văn Thạch', '345678901234', 912345678, '2003-02-23 00:00:00', '12/24 Cộng Hòa, Tân Bình, TP HCM', 1, 'NHANVIENTIEPTAN', 'CONLAMVIEC', 'avt_employee8.jpg');
 COMMIT;
 
 -- ----------------------------
@@ -407,7 +419,13 @@ CREATE TABLE `PhieuDatPhong` (
   `ThoiGianNhan` datetime DEFAULT NULL,
   `GhiChu` varchar(255) DEFAULT NULL,
   `TinhTrang` int(11) DEFAULT NULL,
-  PRIMARY KEY (`MaPhieuDat`)
+  PRIMARY KEY (`MaPhieuDat`),
+  KEY `FK71bx918moi1vlsbd9qtn9aud9` (`MaKhachHang`),
+  KEY `FKtkv7flmc26cmsdfas2fxgs799` (`MaNhanVien`),
+  KEY `FKkb8pjcsw9rb3pm1hrm8ux5cou` (`MaPhong`),
+  CONSTRAINT `FK71bx918moi1vlsbd9qtn9aud9` FOREIGN KEY (`MaKhachHang`) REFERENCES `KhachHang` (`MaKhachHang`) ON DELETE CASCADE,
+  CONSTRAINT `FKkb8pjcsw9rb3pm1hrm8ux5cou` FOREIGN KEY (`MaPhong`) REFERENCES `Phong` (`MaPhong`) ON DELETE CASCADE,
+  CONSTRAINT `FKtkv7flmc26cmsdfas2fxgs799` FOREIGN KEY (`MaNhanVien`) REFERENCES `NhanVien` (`MaNhanVien`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------
@@ -488,7 +506,9 @@ CREATE TABLE `TaiKhoan` (
   `TenDangNhap` varchar(255) DEFAULT NULL,
   `MatKhau` varchar(255) DEFAULT NULL,
   `MaNhanVien` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`MaTaiKhoan`)
+  PRIMARY KEY (`MaTaiKhoan`),
+  KEY `FKf08970nqaug3otfu2giqkxveu` (`MaNhanVien`),
+  CONSTRAINT `FKf08970nqaug3otfu2giqkxveu` FOREIGN KEY (`MaNhanVien`) REFERENCES `NhanVien` (`MaNhanVien`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ----------------------------

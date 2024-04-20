@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import lombok.ToString;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -25,13 +27,15 @@ import java.util.Set;
       @NamedQuery(name = "DichVu.findAll", query = "SELECT d FROM DichVu d"),
       @NamedQuery(name = "DichVu.findByMaDichVu", query = "SELECT d FROM DichVu d WHERE d.maDichVu = :maDichVu"),
       @NamedQuery(name = "DichVu.findByTenDichVu", query = "SELECT d FROM DichVu d WHERE d.tenDichVu = :tenDichVu"),
-      @NamedQuery(name = "DichVu.countAll", query = "SELECT COUNT(d) FROM DichVu d")
+      @NamedQuery(name = "DichVu.countAll", query = "SELECT COUNT(d) FROM DichVu d"),
+      @NamedQuery(name = "DichVu.findListDichVuByMaHoaDon", query = "SELECT c.dichVu FROM ChiTietHD_DichVu c WHERE c.hoaDon.maHoaDon = :maHoaDon")
 })
 public class DichVu implements Serializable {
    @Serial
    private static final long serialVersionUID = 8467030042899669890L;
 
    @Id
+   @EqualsAndHashCode.Include
    @Column(name = "MaDichVu", nullable = false)
    private String maDichVu;
 
@@ -61,5 +65,18 @@ public class DichVu implements Serializable {
       this.donViTinh = donViTinh;
       this.donGia = donGia;
       this.anhMinhHoa = anhMinhHoa;
+   }
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      DichVu dichVu = (DichVu) o;
+      return Objects.equals(maDichVu, dichVu.maDichVu);
+   }
+
+   @Override
+   public int hashCode() {
+      return Objects.hashCode(maDichVu);
    }
 }

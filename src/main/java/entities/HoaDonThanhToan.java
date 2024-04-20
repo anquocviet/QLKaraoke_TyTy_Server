@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,28 +35,51 @@ import java.util.Set;
       @NamedQuery(name = "HoaDonThanhToan.findByMaNhanVien", query = "SELECT h FROM HoaDonThanhToan h WHERE h.nhanVien.maNhanVien = :maNhanVien"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhuyenMai", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khuyenMai.maKhuyenMai = :maKhuyenMai"),
       @NamedQuery(name = "HoaDonThanhTOan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaPhongDangSuDung", query = "SELECT h FROM HoaDonThanhToan h JOIN h.listCTP ct WHERE ct.phong.maPhong = :maPhong ORDER BY ct.gioVao DESC"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHangDangSuDung",
+            query = "SELECT h FROM HoaDonThanhToan h JOIN h.listCTP ct WHERE h.khachHang.maKhachHang = :maKhachHang ORDER BY ct.gioVao DESC"),
+      @NamedQuery(name = "HoaDonThanhToan.countBill", query = "SELECT COUNT(h) FROM HoaDonThanhToan h"),
+      @NamedQuery(name = "HoaDonThanhToan.countBillByMaKhachHang", query = "SELECT COUNT(h) FROM HoaDonThanhToan h WHERE h.khachHang.maKhachHang = :maKhachHang"),
+      @NamedQuery(name = "HoaDonThanhToan.getBillsByDay", query = "SELECT h.ngayLap, COUNT(h) FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap GROUP BY h.ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.getBillsByMonth",
+            query = "SELECT h.ngayLap, COUNT(h) FROM HoaDonThanhToan h " +
+                          "WHERE MONTH(h.ngayLap) = :ngayLap AND YEAR(h.ngayLap) = YEAR(:ngayLap) AND MONTH(h.ngayLap) = MONTH(:ngayLap) GROUP BY h.ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.getBillsByQuarter",
+            query = "SELECT h.ngayLap, COUNT(h) FROM HoaDonThanhToan h " +
+                          "WHERE QUARTER(h.ngayLap) = QUARTER(:ngayLap) AND YEAR(h.ngayLap) = YEAR(:ngayLap) AND QUARTER(h.ngayLap) = QUARTER(:ngayLap) GROUP BY h.ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.getBillsByYear",
+            query = "SELECT h.ngayLap, COUNT(h) FROM HoaDonThanhToan h " +
+                          "WHERE YEAR(h.ngayLap) = YEAR(:ngayLap) GROUP BY h.ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoney", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoneyByMaKhachHang", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE h.khachHang.maKhachHang = :maKhachHang"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoneyByNgayLap", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoneyByMonth", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE MONTH(h.ngayLap) = MONTH(:ngayLap) AND YEAR(h.ngayLap) = YEAR(:ngayLap)"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoneyByQuarter", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE QUARTER(h.ngayLap) = QUARTER(:ngayLap) AND YEAR(h.ngayLap) = YEAR(:ngayLap)"),
+      @NamedQuery(name = "HoaDonThanhToan.calcMoneyByYear", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE YEAR(h.ngayLap) = YEAR(:ngayLap)")
 })
 public class HoaDonThanhToan implements Serializable {
    @Serial
    private static final long serialVersionUID = 4024898374929922829L;
 
    @Id
+   @EqualsAndHashCode.Include
    @Column(name = "MaHoaDon", nullable = false)
    private String maHoaDon;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhachHang")
    @ToString.Exclude
    private KhachHang khachHang;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude
    private NhanVien nhanVien;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaKhuyenMai")
    @ToString.Exclude
@@ -83,4 +107,6 @@ public class HoaDonThanhToan implements Serializable {
       this.ngayLap = ngayLap;
       this.tongTien = tongTien;
    }
+
+
 }

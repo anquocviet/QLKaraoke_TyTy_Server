@@ -11,13 +11,13 @@ import java.util.List;
  */
 
 public interface ChiTietHD_PhongRepository {
-   public List<ChiTietHD_Phong> getCTPhongTheoMaHD(String maHD);
-
    public boolean addChiTietHD_Phong(ChiTietHD_Phong ct);
 
    public boolean updateChiTietHD_Phong(ChiTietHD_Phong ct);
 
    public boolean deleteChiTietHD_Phong(ChiTietHD_Phong ct);
+
+   public List<ChiTietHD_Phong> getCTPhongTheoMaHD(String maHD);
 
    public List<ChiTietHD_Phong> findByMaHoaDon(String maHoaDon);
 
