@@ -13,11 +13,11 @@ import java.util.List;
 public interface NhanVienRepository {
    public List<NhanVien> findAll();
 
-   public NhanVien findByMaNhanVien(String maNhanVien);
+   public List<NhanVien> findByMaNhanVien(String maNhanVien);
 
    public List<NhanVien> findByHoTen(String hoTen);
 
-   public NhanVien findByCCCD(String cccd);
+   public List<NhanVien> findByCCCD(String cccd);
 
    public List<NhanVien> findBySoDienThoai(int soDienThoai);
 

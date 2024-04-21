@@ -24,11 +24,15 @@ import java.util.Set;
 @ToString
 @Entity
 @NamedQueries({
-      @NamedQuery(name = "DichVu.findAll", query = "SELECT d FROM DichVu d"),
-      @NamedQuery(name = "DichVu.findByMaDichVu", query = "SELECT d FROM DichVu d WHERE d.maDichVu = :maDichVu"),
-      @NamedQuery(name = "DichVu.findByTenDichVu", query = "SELECT d FROM DichVu d WHERE d.tenDichVu = :tenDichVu"),
-      @NamedQuery(name = "DichVu.countAll", query = "SELECT COUNT(d) FROM DichVu d"),
-      @NamedQuery(name = "DichVu.findListDichVuByMaHoaDon", query = "SELECT c.dichVu FROM ChiTietHD_DichVu c WHERE c.hoaDon.maHoaDon = :maHoaDon")
+        @NamedQuery(name = "DichVu.findAll", query = "SELECT d FROM DichVu d"),
+        @NamedQuery(name = "DichVu.findByMaDichVu", query = "SELECT d FROM DichVu d WHERE d.maDichVu LIKE :maDichVu"),
+        @NamedQuery(name = "DichVu.findByTenDichVu", query = "SELECT d FROM DichVu d WHERE d.tenDichVu = :tenDichVu"),
+        @NamedQuery(name = "DichVu.countAll", query = "SELECT COUNT(d.maDichVu) FROM DichVu d"),
+        @NamedQuery(name = "DichVu.findListDichVuByMaHoaDon", query = "SELECT c.dichVu FROM ChiTietHD_DichVu c WHERE c.hoaDon.maHoaDon = :maHoaDon"),
+        @NamedQuery(name = "DichVu.updateSoLuongTon",
+            query = "UPDATE DichVu dv SET dv.soLuongTon = :soLuongTon WHERE dv.maDichVu = :maDichVu"),
+        @NamedQuery(name = "DichVu.updateThongTinDichVu",
+            query = "UPDATE DichVu dv SET dv.tenDichVu = :tenDichVu, dv.soLuongTon = :soLuongTon, dv.donViTinh = :donViTinh, dv.donGia = :donGia, dv.anhMinhHoa = :anhMinhHoa WHERE dv.maDichVu = :maDichVu")
 })
 public class DichVu implements Serializable {
    @Serial

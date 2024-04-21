@@ -11,7 +11,6 @@ import java.util.List;
  */
 
 public interface ChiTietHD_DichVuRepository {
-   public List<ChiTietHD_DichVu> getCTDichVuTheoMaHD(String maHD);
 
    public boolean addChiTietHD_DichVu(ChiTietHD_DichVu ct);
 

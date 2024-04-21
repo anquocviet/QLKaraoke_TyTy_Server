@@ -30,7 +30,7 @@ import java.util.Set;
 @Entity
 @NamedQueries({
       @NamedQuery(name = "HoaDonThanhToan.findAll", query = "SELECT h FROM HoaDonThanhToan h"),
-      @NamedQuery(name = "HoaDonThanhToan.findByMaHoaDon", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maHoaDon = :maHoaDon"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaHoaDon", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maHoaDon LIKE :maHoaDon"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHang", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khachHang.maKhachHang = :maKhachHang"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaNhanVien", query = "SELECT h FROM HoaDonThanhToan h WHERE h.nhanVien.maNhanVien = :maNhanVien"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhuyenMai", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khuyenMai.maKhuyenMai = :maKhuyenMai"),

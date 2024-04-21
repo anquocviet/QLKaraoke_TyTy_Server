@@ -84,8 +84,10 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public HoaDonThanhToan findBill(String billID) {
-      return em.find(HoaDonThanhToan.class, billID);
+   public List<HoaDonThanhToan> findBill(String billID) {
+      return em.createNamedQuery("HoaDonThanhToan.findByMaHoaDon")
+                   .setParameter("maHoaDon", "%" + billID + "%")
+                   .getResultList();
    }
 
    @Override

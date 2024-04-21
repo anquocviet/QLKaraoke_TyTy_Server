@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import repositories.ChiTietHD_PhongRepository;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -92,7 +93,7 @@ public class ChiTietHD_PhongService implements ChiTietHD_PhongRepository {
    }
 
    @Override
-   public List<ChiTietHD_Phong> findByDate(String start, String end) {
+   public List<ChiTietHD_Phong> findByDate(Instant start, Instant end) {
       return em.createNamedQuery("ChiTietHD_Phong.findByDate", ChiTietHD_Phong.class)
                    .setParameter("start", start)
                    .setParameter("end", end)

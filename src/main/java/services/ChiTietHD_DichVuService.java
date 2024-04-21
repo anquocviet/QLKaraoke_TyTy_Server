@@ -24,12 +24,7 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    }
 
    @Override
-   public List<entities.ChiTietHD_DichVu> getCTDichVuTheoMaHD(String maHD) {
-      return List.of();
-   }
-
-   @Override
-   public boolean addChiTietHD_DichVu(entities.ChiTietHD_DichVu ct) {
+   public boolean addChiTietHD_DichVu(ChiTietHD_DichVu ct) {
       try {
          transaction.begin();
          em.persist(ct);
@@ -43,7 +38,7 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    }
 
    @Override
-   public boolean updateChiTietHD_DichVu(entities.ChiTietHD_DichVu ct) {
+   public boolean updateChiTietHD_DichVu(ChiTietHD_DichVu ct) {
       try {
          transaction.begin();
          if (em.find(ChiTietHD_DichVu.class, ct.getId()) == null) {
@@ -60,7 +55,7 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    }
 
    @Override
-   public boolean deleteChiTietHD_DichVu(entities.ChiTietHD_DichVu ct) {
+   public boolean deleteChiTietHD_DichVu(ChiTietHD_DichVu ct) {
       try {
          transaction.begin();
          em.remove(ct);
@@ -74,7 +69,7 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    }
 
    @Override
-   public List<entities.ChiTietHD_DichVu> findByMaHoaDon(String maHoaDon) {
+   public List<ChiTietHD_DichVu> findByMaHoaDon(String maHoaDon) {
       return em.createNamedQuery("ChiTietHD_DichVu.findByMaHoaDon", ChiTietHD_DichVu.class)
                    .setParameter("maHoaDon", maHoaDon)
                    .getResultStream()
@@ -82,7 +77,10 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    }
 
    @Override
-   public List<entities.ChiTietHD_DichVu> findByMaDichVu(String maDichVu) {
-      return List.of();
+   public List<ChiTietHD_DichVu> findByMaDichVu(String maDichVu) {
+      return em.createNamedQuery("ChiTietHD_DichVu.findByMaDichVu", ChiTietHD_DichVu.class)
+                   .setParameter("maDichVu", maDichVu)
+                   .getResultStream()
+                   .toList();
    }
 }

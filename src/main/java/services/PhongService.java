@@ -57,17 +57,17 @@ public class PhongService implements PhongRepository {
 
    @Override
    public boolean deletePhong(String idRoom) {
-        EntityTransaction transaction = em.getTransaction();
-        try {
-             transaction.begin();
-             Phong room = em.find(Phong.class, idRoom);
-             em.remove(room);
-             transaction.commit();
-             return true;
-        } catch (Exception e) {
-             transaction.rollback();
-             return false;
-        }
+      EntityTransaction transaction = em.getTransaction();
+      try {
+         transaction.begin();
+         Phong room = em.find(Phong.class, idRoom);
+         em.remove(room);
+         transaction.commit();
+         return true;
+      } catch (Exception e) {
+         transaction.rollback();
+         return false;
+      }
    }
 
    @Override
@@ -77,10 +77,11 @@ public class PhongService implements PhongRepository {
    }
 
    @Override
-   public Phong findByMaPhong(String maPhong) {
-        return em.createNamedQuery("Phong.findByMaPhong", Phong.class)
-                     .setParameter("maPhong", maPhong)
-                     .getSingleResult();
+   public List<Phong> findByMaPhong(String maPhong) {
+      return em.createNamedQuery("Phong.findByMaPhong", Phong.class)
+                   .setParameter("maPhong", "%" + maPhong + "%")
+                   .getResultStream()
+                   .toList();
    }
 
    @Override
@@ -104,6 +105,6 @@ public class PhongService implements PhongRepository {
    public List<Phong> findRoomByStatus(int status) {
       return em.createNamedQuery("Phong.findRoomByStatus", Phong.class)
                    .setParameter("status", status)
-                  .getResultList();
+                   .getResultList();
    }
 }

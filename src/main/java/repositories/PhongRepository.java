@@ -18,7 +18,7 @@ public interface PhongRepository {
 
    public List<Phong> findAll();
 
-   public Phong findByMaPhong(String maPhong);
+   public List<Phong> findByMaPhong(String maPhong);
 
    public Long countRoomStatus(int status);
 

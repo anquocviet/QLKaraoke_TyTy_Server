@@ -2,6 +2,7 @@ package repositories;
 
 import entities.ChiTietHD_Phong;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public interface ChiTietHD_PhongRepository {
 
    public ChiTietHD_Phong findByMaPhongAndMaHoaDon(String maHoaDon, String maPhong);
 
-   public List<ChiTietHD_Phong> findByDate(String start, String end);
+   public List<ChiTietHD_Phong> findByDate(Instant start, Instant end);
 
    public long calcTotalHoursOfUseOfCustomer(String maKhachHang);
 }

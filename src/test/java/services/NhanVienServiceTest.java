@@ -23,23 +23,24 @@ class NhanVienServiceTest {
 
     @Test
     void findByMaNhanVien() {
-        NhanVien nhanVien = new NhanVienService().findByMaNhanVien("NV0503");
-        System.out.println(nhanVien);
+        List<NhanVien> list = new NhanVienService().findByMaNhanVien("NV0503");
+        list.forEach(System.out::println);
     }
 
     @Test
     void findByHoTen() {
-        NhanVien nhanVien = new NhanVienService().findByHoTen("Nguyễn Văn Thạch");
+        NhanVien nhanVien = new NhanVienService().findByHoTen("Nguyễn Văn Thạch").getFirst();
         System.out.println(nhanVien);
     }
 
     @Test
     void findByCCCD() {
     }
+
     @Test
     void findBySoDienThoai() {
-        NhanVien nhanVien = new NhanVienService().findBySoDienThoai(912345678);
-        System.out.println(nhanVien);
+        List<NhanVien> list = new NhanVienService().findBySoDienThoai(912345678);
+         list.forEach(System.out::println);
     }
 
     @Test

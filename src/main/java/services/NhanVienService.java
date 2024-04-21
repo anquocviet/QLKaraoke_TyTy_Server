@@ -27,12 +27,11 @@ public class NhanVienService implements NhanVienRepository {
    }
 
    @Override
-   public NhanVien findByMaNhanVien(String maNhanVien) {
+   public List<NhanVien> findByMaNhanVien(String maNhanVien) {
       return em.createNamedQuery("NhanVien.findByMaNhanVien", NhanVien.class)
                    .setParameter("maNhanVien", "%" + maNhanVien + "%")
                    .getResultStream()
-                   .findFirst()
-                   .orElse(null);
+                   .toList();
    }
 
    @Override
@@ -44,18 +43,17 @@ public class NhanVienService implements NhanVienRepository {
    }
 
    @Override
-   public NhanVien findByCCCD(String cccd) {
+   public List<NhanVien> findByCCCD(String cccd) {
       return em.createNamedQuery("NhanVien.findByCCCD", NhanVien.class)
                    .setParameter("cccd", cccd)
                    .getResultStream()
-                   .findFirst()
-                   .orElse(null);
+                   .toList();
    }
 
    @Override
    public List<NhanVien> findBySoDienThoai(int soDienThoai) {
       return em.createNamedQuery("NhanVien.findBySoDienThoai", NhanVien.class)
-                   .setParameter("soDienThoai", soDienThoai)
+                   .setParameter("soDienThoai", soDienThoai + "")
                    .getResultStream()
                    .toList();
    }

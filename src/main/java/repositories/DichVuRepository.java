@@ -14,12 +14,13 @@ public interface DichVuRepository {
    public boolean addDichVu(DichVu dv);
 
    public boolean updateDichVu(DichVu dv);
+//   public boolean capNhatThongTinDichVu(DichVu dv);
 
-   public boolean deleteDichVu(DichVu dv);
+    public boolean deleteDichVu(DichVu dv);
 
    public List<DichVu> findAllDichVu();
 
-   public DichVu findDichVu(String maDichVu);
+   public List<DichVu> findDichVu(String maDichVu);
 
    public List<DichVu> findListDichVuByMaHoaDon(String maHoaDon);
 

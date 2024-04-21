@@ -47,7 +47,7 @@ public class TaiKhoan implements Serializable {
    @Column(name = "MatKhau")
    private String matKhau;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude

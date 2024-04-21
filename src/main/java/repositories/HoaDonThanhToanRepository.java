@@ -22,7 +22,7 @@ public interface HoaDonThanhToanRepository {
 
    public List<HoaDonThanhToan> findAll();
 
-   public HoaDonThanhToan findBill(String bill);
+   public List<HoaDonThanhToan> findBill(String bill);
 
    public List<HoaDonThanhToan> findBill(Instant date);
 

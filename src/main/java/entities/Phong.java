@@ -26,7 +26,7 @@ import java.util.Set;
 @ToString
 @Entity
 @NamedQueries({
-      @NamedQuery(name = "Phong.findByMaPhong", query = "SELECT p FROM Phong p WHERE p.maPhong = :maPhong"),
+      @NamedQuery(name = "Phong.findByMaPhong", query = "SELECT p FROM Phong p WHERE p.maPhong LIKE :maPhong"),
       @NamedQuery(name = "Phong.findAll", query = "SELECT p FROM Phong p"),
       @NamedQuery(name = "Phong.countRoomStatus", query = "SELECT COUNT(p) FROM Phong p WHERE p.tinhTrang = :status"),
       @NamedQuery(name = "Phong.findRoomByTypeStatusCapacity",

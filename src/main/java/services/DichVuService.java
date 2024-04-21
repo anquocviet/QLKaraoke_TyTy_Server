@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class DichVuService implements DichVuRepository {
    private EntityManager em = null;
+   EntityTransaction transaction = null;
    private final String PERSISTENCE_UNIT_NAME = "MariaDB Karaoke";
 
    public DichVuService() {
@@ -41,10 +42,14 @@ public class DichVuService implements DichVuRepository {
       EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
-         if (em.find(DichVu.class, dv.getMaDichVu()) == null) {
-            return false;
-         }
-         em.merge(dv);
+         em.createNamedQuery("DichVu.updateThongTinDichVu")
+               .setParameter("tenDichVu", dv.getTenDichVu())
+               .setParameter("soLuongTon", dv.getSoLuongTon())
+               .setParameter("donViTinh", dv.getDonViTinh())
+               .setParameter("donGia", dv.getDonGia())
+               .setParameter("anhMinhHoa", dv.getAnhMinhHoa())
+               .setParameter("maDichVu", dv.getMaDichVu())
+               .executeUpdate();
          transaction.commit();
          return true;
       } catch (Exception e) {
@@ -78,11 +83,11 @@ public class DichVuService implements DichVuRepository {
    }
 
    @Override
-   public DichVu findDichVu(String maDichVu) {
+   public List<DichVu> findDichVu(String maDichVu) {
       return em.createQuery("SELECT d FROM DichVu d WHERE d.maDichVu LIKE :maDichVu", DichVu.class)
                    .setParameter("maDichVu", "%" + maDichVu + "%")
                    .getResultStream()
-                   .findFirst().orElse(null);
+                   .toList();
    }
 
    @Override
@@ -100,4 +105,5 @@ public class DichVuService implements DichVuRepository {
    public void close() {
       em.close();
    }
+
 }
