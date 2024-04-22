@@ -103,23 +103,12 @@ public class ServerThread implements Runnable {
                case "roomDetail" -> roomDetailController(line);
                case "voucher" -> voucherController(line);
                case "customer" -> customerController(line);
-               default -> out.flush();
+               default -> dos.flush();
             }
          }
 
       } catch (IOException e) {
          throw new RuntimeException(e);
-      }
-      finally {
-         try {
-            if (dis != null) dis.close();
-            if (dos != null) dos.close();
-            if (in != null) in.close();
-            if (out != null) out.close();
-            socket.close();
-         } catch (IOException e) {
-            e.printStackTrace();
-         }
       }
    }
 

@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -63,9 +62,10 @@ public class Phong implements Serializable {
    @ToString.Exclude
    private Set<PhieuDatPhong> phieuDatPhongs;
 
-    public Phong(String maPhong) {
-        this.maPhong = maPhong;
-    }
+   public Phong(String maPhong) {
+      this.maPhong = maPhong;
+   }
+
    public Phong(String maPhong, Enum_LoaiPhong loaiPhong, Integer tinhTrang, Integer sucChua, Integer giaPhong) {
       this.maPhong = maPhong;
       this.loaiPhong = loaiPhong;
