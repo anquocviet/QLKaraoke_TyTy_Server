@@ -1,21 +1,31 @@
 package server;
 
+import entities.CT_KhuyenMai;
+import entities.ChiTietHD_DichVu;
+import entities.ChiTietHD_Phong;
 import entities.DichVu;
 import entities.HoaDonThanhToan;
+import entities.KhachHang;
+import entities.NhanVien;
 import entities.PhieuDatPhong;
 import entities.Phong;
 import entities.TaiKhoan;
 import lombok.SneakyThrows;
+import repositories.CT_KhuyenMaiRepository;
 import repositories.ChiTietHD_DichVuRepository;
 import repositories.DichVuRepository;
 import repositories.HoaDonThanhToanRepository;
+import repositories.KhachHangRepository;
 import repositories.NhanVienRepository;
 import repositories.PhieuDatPhongRepository;
 import repositories.PhongRepository;
 import repositories.TaiKhoanRepository;
+import services.CT_KhuyenMaiService;
 import services.ChiTietHD_DichVuService;
+import services.ChiTietHD_PhongService;
 import services.DichVuService;
 import services.HoaDonThanhToanService;
+import services.KhachHangService;
 import services.NhanVienService;
 import services.PhieuDatPhongService;
 import services.PhongService;
@@ -27,6 +37,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -48,6 +59,9 @@ public class ServerThread implements Runnable {
    private final DichVuRepository serviceService;
    private final HoaDonThanhToanRepository billService;
    private final ChiTietHD_DichVuRepository serviceDetailService;
+   private final ChiTietHD_PhongService roomDetailService;
+   private final CT_KhuyenMaiRepository voucherService;
+   private final KhachHangRepository customerService;
 
    public ServerThread(Socket socket) {
       this.socket = socket;
@@ -58,13 +72,16 @@ public class ServerThread implements Runnable {
       serviceService = new DichVuService();
       billService = new HoaDonThanhToanService();
       serviceDetailService = new ChiTietHD_DichVuService();
+      roomDetailService = new ChiTietHD_PhongService();
+      voucherService = new CT_KhuyenMaiService();
+      customerService = new KhachHangService();
    }
 
    @Override
    public void run() {
       try {
-         dis = new DataInputStream(socket.getInputStream());
          dos = new DataOutputStream(socket.getOutputStream());
+         dis = new DataInputStream(socket.getInputStream());
          in = new ObjectInputStream(socket.getInputStream());
          out = new ObjectOutputStream(socket.getOutputStream());
 
@@ -83,7 +100,10 @@ public class ServerThread implements Runnable {
                case "service" -> serviceController(line);
                case "bill" -> billController(line);
                case "serviceDetail" -> serviceDetailController(line);
-               default -> out.flush();
+               case "roomDetail" -> roomDetailController(line);
+               case "voucher" -> voucherController(line);
+               case "customer" -> customerController(line);
+               default -> dos.flush();
             }
          }
 
@@ -93,23 +113,131 @@ public class ServerThread implements Runnable {
    }
 
    @SneakyThrows
+   private void customerController(String line) {
+      if (line.equals("add-customer")) {
+         KhachHang customer = (KhachHang) in.readObject();
+         dos.writeBoolean(customerService.addCustomer(customer));
+      } else if (line.equals("update-customer")) {
+         KhachHang customer = (KhachHang) in.readObject();
+         dos.writeBoolean(customerService.updateCustomer(customer));
+      } else if (line.equals("find-all-customer")) {
+         out.writeObject(customerService.findAll());
+      } else if (line.matches("find-customer,.*")) {
+         out.writeObject(customerService.findByMaKhachHang(line.split(",")[1]));
+      } else if (line.matches("find-customer-by-name,.*")) {
+         out.writeObject(customerService.findByTenKhachHang(line.split(",")[1]));
+      } else if (line.matches("find-customer-by-phone,.*")) {
+         out.writeObject(customerService.findBySoDienThoai(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
+      }
+   }
+
+   @SneakyThrows
+   private void voucherController(String line) {
+      if (line.equals("find-all-voucher")) {
+         out.writeObject(voucherService.findAll());
+      } else if (line.matches("find-voucher,.*")) {
+         out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
+      } else if (line.matches("find-voucher-by-name,.*")) {
+         out.writeObject(voucherService.findByTenKhuyenMai(line.split(",")[1]));
+      } else if (line.equals("add-voucher")) {
+         dos.writeBoolean(voucherService.addCT_KhuyenMai((CT_KhuyenMai) in.readObject()));
+      } else if (line.equals("update-voucher")) {
+         dos.writeBoolean(voucherService.updateCT_KhuyenMai((CT_KhuyenMai) in.readObject()));
+      } else if (line.matches("delete-voucher,.*}")) {
+         dos.writeBoolean(voucherService.deleteCT_KhuyenMai(line.split(",")[1]));
+      } else if (line.equals("count-voucher")) {
+         dos.writeUTF("0");
+      } else {
+         out.writeObject(null);
+      }
+   }
+
+   @SneakyThrows
+   private void roomDetailController(String line) {
+      if (line.equals("add-roomDetail")) {
+         dos.writeBoolean(roomDetailService.addChiTietHD_Phong((ChiTietHD_Phong) in.readObject()));
+      } else if (line.equals("update-roomDetail")) {
+         dos.writeBoolean(roomDetailService.updateChiTietHD_Phong((ChiTietHD_Phong) in.readObject()));
+      } else if (line.equals("delete-roomDetail")) {
+         dos.writeBoolean(roomDetailService.deleteChiTietHD_Phong((ChiTietHD_Phong) in.readObject()));
+      } else if (line.matches("find-by-bill-id,.*")) {
+         out.writeObject(roomDetailService.findByMaHoaDon(line.split(",")[1]));
+      } else if (line.matches("find-by-room-id,.*")) {
+         out.writeObject(roomDetailService.findByMaPhong(line.split(",")[1]));
+      } else if (line.equals("find-by-date")) {
+         Instant startDate = (Instant) in.readObject();
+         Instant endDate = (Instant) in.readObject();
+         out.writeObject(roomDetailService.findByDate(startDate, endDate));
+      } else if (line.matches("calc-total-hours-use-of-customer,.*")) {
+         dos.writeLong(roomDetailService.calcTotalHoursOfUseOfCustomer(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
+      }
+   }
+
+   @SneakyThrows
    private void serviceDetailController(String line) {
-      if (line.matches("find-by-bill-id,.*")) {
-         out.writeObject(serviceDetailService.findByMaHoaDon(line.split(",")[1]));
-      } else if (line.equals("add-serviceDetail")) {
-         boolean result = serviceDetailService.addChiTietHD_DichVu((entities.ChiTietHD_DichVu) in.readObject());
-         out.writeBoolean(result);
+      if (line.equals("add-serviceDetail")) {
+         boolean result = serviceDetailService.addChiTietHD_DichVu((ChiTietHD_DichVu) in.readObject());
+         dos.writeBoolean(result);
       } else if (line.equals("update-serviceDetail")) {
-         boolean result = serviceDetailService.updateChiTietHD_DichVu((entities.ChiTietHD_DichVu) in.readObject());
-         out.writeBoolean(result);
+         boolean result = serviceDetailService.updateChiTietHD_DichVu((ChiTietHD_DichVu) in.readObject());
+         dos.writeBoolean(result);
+      } else if (line.matches("delete-serviceDetail")) {
+         dos.writeBoolean(serviceDetailService.deleteChiTietHD_DichVu((ChiTietHD_DichVu) in.readObject()));
+      } else if (line.matches("find-by-bill-id,.*")) {
+         out.writeObject(serviceDetailService.findByMaHoaDon(line.split(",")[1]));
+      } else if (line.matches("find-by-service-id,*")) {
+         out.writeObject(serviceDetailService.findByMaDichVu(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
       }
    }
 
    @SneakyThrows
    private void billController(String line) {
-      if (line.matches("find-bill-by-room-id,.*")) {
+      if (line.equals("add-bill")) {
+         HoaDonThanhToan bill = (HoaDonThanhToan) in.readObject();
+         dos.writeBoolean(billService.addHoaDonThanhToan(bill));
+      } else if (line.equals("update-bill")) {
+         HoaDonThanhToan bill = (HoaDonThanhToan) in.readObject();
+         dos.writeBoolean(billService.updateHoaDonThanhToan(bill));
+      } else if (line.matches("delete-bill,.*")) {
+         dos.writeBoolean(billService.deleteHoaDonThanhToan(line.split(",")[1]));
+      } else if (line.equals("find-all-bill")) {
+         out.writeObject(billService.findAll());
+      } else if (line.matches("find-bill,.*")) {
+         out.writeObject(billService.findBill(line.split(",")[1]));
+      } else if (line.equals("find-bill-by-date-create")) {
+         Instant ngayTao = (Instant) in.readObject();
+         out.writeObject(billService.findBill(ngayTao));
+      } else if (line.matches("find-bill-by-room-id,.*")) {
          HoaDonThanhToan bill = billService.findByRoomUsing(line.split(",")[1]);
          out.writeObject(bill);
+      } else if (line.matches("find-bill-by-customer-id,.*")) {
+         out.writeObject(billService.findByCustomerID(line.split(",")[1]));
+      } else if (line.matches("find-bill-by-employee-id,.*")) {
+         out.writeObject(billService.findByEmployeeID(line.split(",")[1]));
+      } else if (line.equals("count-bill")) {
+         dos.writeLong(billService.countBill());
+      } else if (line.matches("count-bill-by-customer-id,.*")) {
+         dos.writeLong(billService.countBill(line.split(",")[1]));
+      } else if (line.matches("get-bill-by-date,.*")) {
+         Instant date = (Instant) in.readObject();
+         String type = line.split(",")[1];
+         out.writeObject(billService.getBillsByDate(date, type));
+      } else if (line.equals("calc-money")) {
+         dos.writeLong(billService.calcMoney());
+      } else if (line.matches("calc-money-by-date,.*")) {
+         Instant date = (Instant) in.readObject();
+         String type = line.split(",")[1];
+         dos.writeLong(billService.calcMoney(date, type));
+      } else if (line.matches("calc-money-by-customer-id,.*")) {
+         dos.writeLong(billService.calcMoney(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
       }
    }
 
@@ -118,19 +246,21 @@ public class ServerThread implements Runnable {
       if (line.equals("find-all-service")) {
          out.writeObject(serviceService.findAllDichVu());
       } else if (line.matches("find-service,.*")) {
-         out.writeObject(null);
+         out.writeObject(serviceService.findDichVu(line.split(",")[1]));
+      } else if (line.equals("add-service")) {
+         dos.writeBoolean(false);
       } else if (line.equals("update-service")) {
          boolean result = serviceService.updateDichVu((DichVu) in.readObject());
-         out.writeBoolean(result);
+         dos.writeBoolean(result);
       } else if (line.equals("delete-service")) {
          boolean result = serviceService.deleteDichVu((DichVu) in.readObject());
-         out.writeBoolean(result);
-      } else if (line.equals("add-service")) {
-         out.writeBoolean(false);
-      } else if (line.equals("count-service")) {
-         dos.writeUTF("0");
-      } else if (line.matches("service-find-by-bill-id,.*")) {
+         dos.writeBoolean(result);
+      } else if (line.matches("find-service-by-bill-id,.*")) {
          out.writeObject(serviceService.findListDichVuByMaHoaDon(line.split(",")[1]));
+      } else if (line.equals("count-all-service")) {
+         dos.writeLong(serviceService.countDichVu());
+      } else {
+         out.writeObject(null);
       }
    }
 
@@ -140,21 +270,39 @@ public class ServerThread implements Runnable {
          out.writeObject(employeeService.findAll());
       } else if (line.matches("find-employee,.*")) {
          out.writeObject(employeeService.findByMaNhanVien(line.split(",")[1]));
+      } else if (line.matches("find-employee-by-name,.*")) {
+         out.writeObject(employeeService.findByHoTen(line.split(",")[1]));
+      } else if (line.matches("find-employee-by-cccd,.*")) {
+         out.writeObject(employeeService.findByCCCD(line.split(",")[1]));
+      } else if (line.matches("find-employee-by-phone,.*")) {
+         out.writeObject(employeeService.findBySoDienThoai(Integer.parseInt(line.split(",")[1])));
+      } else if (line.equals("add-employee")) {
+         boolean result = employeeService.addEmployee((NhanVien) in.readObject());
+         dos.writeBoolean(result);
+      } else if (line.equals("update-employee")) {
+         boolean result = employeeService.updateEmployee((NhanVien) in.readObject());
+         dos.writeBoolean(result);
+      } else if (line.matches("delete-employee,.*")) {
+         dos.writeBoolean(employeeService.deleteEmployee(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
       }
    }
 
    @SneakyThrows
    public void roomController(String line) {
-
-      if (line.equals("update-room")) {
+      if (line.equals("add-room")) {
          Phong room = (Phong) in.readObject();
-         out.writeBoolean(roomService.updatePhong(room));
+         dos.writeBoolean(roomService.addPhong(room));
+      } else if (line.equals("update-room")) {
+         Phong room = (Phong) in.readObject();
+         dos.writeBoolean(roomService.updatePhong(room));
+      } else if (line.matches("delete-room,.*")) {
+         dos.writeBoolean(roomService.deletePhong(line.split(",")[1]));
       } else if (line.equals("find-all-room")) {
          out.writeObject(roomService.findAll());
       } else if (line.matches("find-room,.*")) {
          out.writeObject(roomService.findByMaPhong(line.split(",")[1]));
-      } else if (line.matches("count-room-status,.*")) {
-         dos.writeUTF(roomService.countRoomStatus(Integer.parseInt(line.split(",")[1])).toString());
       } else if (line.equals("find-room-by-type-status-capacity")) {
          List<Integer> arrType = (List<Integer>) in.readObject();
          List<Integer> arrStatus = (List<Integer>) in.readObject();
@@ -162,17 +310,33 @@ public class ServerThread implements Runnable {
          out.writeObject(roomService.findRoomByTypeStatusCapacity(arrType, arrStatus, capacity));
       } else if (line.matches("find-room-by-status,.*")) {
          out.writeObject(roomService.findRoomByStatus(Integer.parseInt(line.split(",")[1])));
+      } else if (line.matches("count-room-by-status,.*")) {
+         dos.writeLong(roomService.countRoomStatus(Integer.parseInt(line.split(",")[1])));
+      } else {
+         out.writeObject(null);
       }
    }
 
 
    @SneakyThrows
    private void bookingTicketController(String line) {
-      if (line.matches("find-booking-ticket-by-room,.*")) {
+
+      if (line.equals("find-all-booking-ticket")) {
+         out.writeObject(bookingTicketService.findAll());
+      } else if (line.matches("find-booking-ticket,.*")) {
+         out.writeObject(bookingTicketService.findByMaPhieuDat(line.split(",")[1]));
+      } else if (line.matches("find-booking-ticket-by-room-id,.*")) {
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
+      } else if (line.equals("add-booking-ticket")) {
+         PhieuDatPhong bookingTicket = (PhieuDatPhong) in.readObject();
+         dos.writeBoolean(bookingTicketService.addPhieuDatPhong(bookingTicket));
       } else if (line.equals("update-booking-ticket")) {
          PhieuDatPhong bookingTicket = (PhieuDatPhong) in.readObject();
-         out.writeBoolean(bookingTicketService.updatePhieuDatPhong(bookingTicket));
+         dos.writeBoolean(bookingTicketService.updatePhieuDatPhong(bookingTicket));
+      } else if (line.matches("delete-booking-ticket,.*")) {
+         dos.writeBoolean(bookingTicketService.deletePhieuDatPhong(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
       }
    }
 
@@ -187,6 +351,16 @@ public class ServerThread implements Runnable {
          } else {
             dos.writeUTF("login-fail");
          }
+      } else if (line.equals("add-account")) {
+         boolean result = accountService.addTaiKhoan((TaiKhoan) in.readObject());
+         dos.writeBoolean(result);
+      } else if (line.equals("update-account")) {
+         boolean result = accountService.updateTaiKhoan((TaiKhoan) in.readObject());
+         dos.writeBoolean(result);
+      } else if (line.matches("delete-account,.*")) {
+         dos.writeBoolean(accountService.deleteTaiKhoan(line.split(",")[1]));
+      } else {
+         out.writeObject(null);
       }
    }
 }

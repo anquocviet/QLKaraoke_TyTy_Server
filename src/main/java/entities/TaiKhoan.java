@@ -25,6 +25,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Entity
+
 @NamedQueries({
       @NamedQuery(name = "TaiKhoan.findByMaTaiKhoan", query = "SELECT tk FROM TaiKhoan tk WHERE tk.maTaiKhoan = :maTaiKhoan"),
       @NamedQuery(name = "TaiKhoan.findAll", query = "SELECT tk FROM TaiKhoan tk"),
@@ -46,7 +47,7 @@ public class TaiKhoan implements Serializable {
    @Column(name = "MatKhau")
    private String matKhau;
 
-   @ManyToOne(fetch = FetchType.LAZY)
+   @ManyToOne(fetch = FetchType.EAGER)
    @OnDelete(action = OnDeleteAction.CASCADE)
    @JoinColumn(name = "MaNhanVien")
    @ToString.Exclude

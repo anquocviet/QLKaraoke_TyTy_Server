@@ -34,6 +34,7 @@ import java.io.Serializable;
 public class ChiTietHD_DichVu implements Serializable {
    @Serial
    private static final long serialVersionUID = -6231783216106061725L;
+
    @EmbeddedId
    private ChiTietHD_DichVuId id;
 

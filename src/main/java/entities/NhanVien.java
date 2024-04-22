@@ -29,12 +29,12 @@ import java.util.Set;
 @ToString
 @NamedQueries({
       @NamedQuery(name = "NhanVien.findAll", query = "SELECT nv FROM NhanVien nv"),
-      @NamedQuery(name = "NhanVien.findByMaNhanVien", query = "SELECT nv FROM NhanVien nv WHERE nv.maNhanVien = :maNhanVien"),
-      @NamedQuery(name = "NhanVien.findByHoTen", query = "SELECT nv FROM NhanVien nv WHERE nv.hoTen = :hoTen"),
-      @NamedQuery(name = "NhanVien.findByCCCD", query = "SELECT nv FROM NhanVien nv WHERE nv.cccd = :cccd"),
-      @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE nv.soDienThoai = :soDienThoai"),
-
+      @NamedQuery(name = "NhanVien.findByMaNhanVien", query = "SELECT nv FROM NhanVien nv WHERE nv.maNhanVien LIKE :maNhanVien"),
+      @NamedQuery(name = "NhanVien.findByHoTen", query = "SELECT nv FROM NhanVien nv WHERE nv.hoTen LIKE :hoTen"),
+      @NamedQuery(name = "NhanVien.findByCCCD", query = "SELECT nv FROM NhanVien nv WHERE nv.cccd LIKE :cccd"),
+      @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE :soDienThoai LIKE CAST(nv.soDienThoai AS STRING)"),
 })
+
 public class NhanVien implements Serializable {
    @Serial
    private static final long serialVersionUID = 4231211857730583614L;
@@ -80,6 +80,10 @@ public class NhanVien implements Serializable {
    @OneToMany(mappedBy = "nhanVien")
    @ToString.Exclude
    private Set<PhieuDatPhong> listPhieuDatPhong;
+
+   public NhanVien(String maNhanVien) {
+      this.maNhanVien = maNhanVien;
+   }
 
    public NhanVien(String maNhanVien, String hoTen, String cccd, Integer soDienThoai, Instant ngaySinh, String diaChi, Integer gioiTinh, Enum_ChucVu chucVu, Enum_TrangThaiLamViec trangThai, String anhDaiDien) {
       this.maNhanVien = maNhanVien;

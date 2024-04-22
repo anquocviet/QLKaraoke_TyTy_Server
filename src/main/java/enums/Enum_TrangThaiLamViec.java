@@ -5,7 +5,7 @@ package enums;
  */
 public enum Enum_TrangThaiLamViec {
    CONLAMVIEC,
-   DANGHI;
+   DANGHIVIEC;
 
    public static Enum_TrangThaiLamViec getEnum(int index) {
       return Enum_TrangThaiLamViec.values()[index];

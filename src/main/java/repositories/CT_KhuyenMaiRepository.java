@@ -19,9 +19,9 @@ public interface CT_KhuyenMaiRepository {
 
    public boolean deleteCT_KhuyenMai(String maKhuyenMai);
 
-   public CT_KhuyenMai findByMaKhuyenMai(String maKhuyenMai);
+   public List<CT_KhuyenMai> findByMaKhuyenMai(String maKhuyenMai);
 
-   public CT_KhuyenMai findByTenKhuyenMai(String tenKhuyenMai);
+   public List<CT_KhuyenMai> findByTenKhuyenMai(String tenKhuyenMai);
 
-   public boolean updateLuotSuDungConLai(String maKhuyenMai, int luotSuDungConLai);
+//   public boolean updateLuotSuDungConLai(String maKhuyenMai, int luotSuDungConLai);
 }

@@ -30,12 +30,12 @@ import java.util.Set;
 @Entity
 @NamedQueries({
       @NamedQuery(name = "HoaDonThanhToan.findAll", query = "SELECT h FROM HoaDonThanhToan h"),
-      @NamedQuery(name = "HoaDonThanhToan.findByMaHoaDon", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maHoaDon = :maHoaDon"),
+      @NamedQuery(name = "HoaDonThanhToan.findByMaHoaDon", query = "SELECT h FROM HoaDonThanhToan h WHERE h.maHoaDon LIKE :maHoaDon"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHang", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khachHang.maKhachHang = :maKhachHang"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaNhanVien", query = "SELECT h FROM HoaDonThanhToan h WHERE h.nhanVien.maNhanVien = :maNhanVien"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhuyenMai", query = "SELECT h FROM HoaDonThanhToan h WHERE h.khuyenMai.maKhuyenMai = :maKhuyenMai"),
       @NamedQuery(name = "HoaDonThanhTOan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
-      @NamedQuery(name = "HoaDonThanhToan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE h.ngayLap = :ngayLap"),
+      @NamedQuery(name = "HoaDonThanhToan.findByNgayLap", query = "SELECT h FROM HoaDonThanhToan h WHERE DAY(h.ngayLap) = DAY(:ngayLap) AND MONTH(h.ngayLap) = MONTH(:ngayLap) AND YEAR(h.ngayLap) = YEAR(:ngayLap)"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaPhongDangSuDung", query = "SELECT h FROM HoaDonThanhToan h JOIN h.listCTP ct WHERE ct.phong.maPhong = :maPhong ORDER BY ct.gioVao DESC"),
       @NamedQuery(name = "HoaDonThanhToan.findByMaKhachHangDangSuDung",
             query = "SELECT h FROM HoaDonThanhToan h JOIN h.listCTP ct WHERE h.khachHang.maKhachHang = :maKhachHang ORDER BY ct.gioVao DESC"),

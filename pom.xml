@@ -10,6 +10,7 @@
     <name>QLKaraoke_TyTy_Server</name>
 
     <properties>
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.source>21</maven.compiler.source>
@@ -58,12 +59,6 @@
             <groupId>com.atomikos</groupId>
             <artifactId>transactions-jta</artifactId>
             <version>6.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>1.5.3</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
