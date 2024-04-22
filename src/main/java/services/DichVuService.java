@@ -45,8 +45,7 @@ public class DichVuService implements DichVuRepository {
          if (em.find(DichVu.class, dv.getMaDichVu()) == null) {
             return false;
          }
-         em.merge(dv);
-         em.refresh(dv);
+            em.merge(dv);
          transaction.commit();
          return true;
       } catch (Exception e) {

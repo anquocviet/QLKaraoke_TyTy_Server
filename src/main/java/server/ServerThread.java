@@ -251,6 +251,7 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void serviceController(String line) {
       if (line.equals("find-all-service")) {
+         serviceService.findAllDichVu().forEach(System.out::println);
          out.writeObject(serviceService.findAllDichVu());
       } else if (line.matches("find-service,.*")) {
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
