@@ -42,14 +42,11 @@ public class DichVuService implements DichVuRepository {
       EntityTransaction transaction = em.getTransaction();
       try {
          transaction.begin();
-         em.createNamedQuery("DichVu.updateThongTinDichVu")
-               .setParameter("tenDichVu", dv.getTenDichVu())
-               .setParameter("soLuongTon", dv.getSoLuongTon())
-               .setParameter("donViTinh", dv.getDonViTinh())
-               .setParameter("donGia", dv.getDonGia())
-               .setParameter("anhMinhHoa", dv.getAnhMinhHoa())
-               .setParameter("maDichVu", dv.getMaDichVu())
-               .executeUpdate();
+         if (em.find(DichVu.class, dv.getMaDichVu()) == null) {
+            return false;
+         }
+         em.merge(dv);
+         em.refresh(dv);
          transaction.commit();
          return true;
       } catch (Exception e) {

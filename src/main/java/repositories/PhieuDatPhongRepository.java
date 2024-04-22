@@ -22,4 +22,6 @@ public interface PhieuDatPhongRepository {
    public boolean deletePhieuDatPhong(String maPhieuDat);
 
    public PhieuDatPhong findBookingTicketByRoomID(String roomID);
+
+   public List<PhieuDatPhong> findAllBookingTicketNotUsed();
 }

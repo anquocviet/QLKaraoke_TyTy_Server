@@ -30,7 +30,7 @@ import java.time.Instant;
             query = "SELECT c FROM ChiTietHD_Phong c WHERE c.id.maHoaDon = :maHoaDon"),
       @NamedQuery(name = "ChiTietHD_Phong.findByMaPhong",
             query = "SELECT c FROM ChiTietHD_Phong c WHERE c.id.maPhong = :maPhong"),
-      @NamedQuery(name = "ChiTietHD_Phong.findByMaHoaDonAndMaPhong",
+      @NamedQuery(name = "ChiTietHD_Phong.findByMaPhongAndMaHoaDon",
             query = "SELECT c FROM ChiTietHD_Phong c WHERE c.id.maHoaDon = :maHoaDon AND c.id.maPhong = :maPhong"),
       @NamedQuery(name = "ChiTietHD_Phong.findByDate",
             query = "SELECT c FROM ChiTietHD_Phong c WHERE c.gioVao >= :start AND c.gioVao <= :end"),
