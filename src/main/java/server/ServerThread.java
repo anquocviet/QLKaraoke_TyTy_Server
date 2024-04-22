@@ -138,7 +138,11 @@ public class ServerThread implements Runnable {
       if (line.equals("find-all-voucher")) {
          out.writeObject(voucherService.findAll());
       } else if (line.matches("find-voucher,.*")) {
-         out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
+         try {
+            out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
+         } catch (Exception e) {
+            out.writeObject(voucherService.findByMaKhuyenMai(""));
+         }
       } else if (line.matches("find-voucher-by-name,.*")) {
          out.writeObject(voucherService.findByTenKhuyenMai(line.split(",")[1]));
       } else if (line.equals("add-voucher")) {
