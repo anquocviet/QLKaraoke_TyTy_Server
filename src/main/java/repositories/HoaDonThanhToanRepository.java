@@ -45,5 +45,5 @@ public interface HoaDonThanhToanRepository {
    public long calcMoney(Instant date, String type);
 
    public long calcMoney(String customerID);
-   public long countByDate(LocalDate date);
+   public long countByDate(Instant date);
 }

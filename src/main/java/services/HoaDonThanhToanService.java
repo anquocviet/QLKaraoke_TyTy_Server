@@ -186,7 +186,7 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public long countByDate(LocalDate date) {
+   public long countByDate(Instant date) {
       return em.createNamedQuery("HoaDonThanhToan.countByDate", Long.class)
                    .setParameter("date", date)
                    .getFirstResult();
