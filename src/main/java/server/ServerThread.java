@@ -91,7 +91,6 @@ public class ServerThread implements Runnable {
             line = line.replaceFirst(control + "-", "");
 
             System.out.println(line);
-
             switch (control) {
                case "room" -> roomController(line);
                case "account" -> accountController(line);
@@ -121,12 +120,16 @@ public class ServerThread implements Runnable {
          KhachHang customer = (KhachHang) in.readObject();
          dos.writeBoolean(customerService.updateCustomer(customer));
       } else if (line.equals("find-all-customer")) {
+         out.reset();
          out.writeObject(customerService.findAll());
       } else if (line.matches("find-customer,.*")) {
+         out.reset();
          out.writeObject(customerService.findByMaKhachHang(line.split(",")[1]));
       } else if (line.matches("find-customer-by-name,.*")) {
+         out.reset();
          out.writeObject(customerService.findByTenKhachHang(line.split(",")[1]));
       } else if (line.matches("find-customer-by-phone,.*")) {
+         out.reset();
          out.writeObject(customerService.findBySoDienThoai(line.split(",")[1]));
       } else {
          out.writeObject(null);
@@ -136,14 +139,18 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void voucherController(String line) {
       if (line.equals("find-all-voucher")) {
+         out.reset();
          out.writeObject(voucherService.findAll());
       } else if (line.matches("find-voucher,.*")) {
          try {
+            out.reset();
             out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
          } catch (Exception e) {
+            out.reset();
             out.writeObject(voucherService.findByMaKhuyenMai(""));
          }
       } else if (line.matches("find-voucher-by-name,.*")) {
+         out.reset();
          out.writeObject(voucherService.findByTenKhuyenMai(line.split(",")[1]));
       } else if (line.equals("add-voucher")) {
          dos.writeBoolean(voucherService.addCT_KhuyenMai((CT_KhuyenMai) in.readObject()));
@@ -167,14 +174,18 @@ public class ServerThread implements Runnable {
       } else if (line.equals("delete-roomDetail")) {
          dos.writeBoolean(roomDetailService.deleteChiTietHD_Phong((ChiTietHD_Phong) in.readObject()));
       } else if (line.matches("find-by-bill-id,.*")) {
+         out.reset();
          out.writeObject(roomDetailService.findByMaHoaDon(line.split(",")[1]));
       } else if (line.matches("find-by-room-id,.*")) {
+         out.reset();
          out.writeObject(roomDetailService.findByMaPhong(line.split(",")[1]));
       } else if (line.matches("find-by-room-bill-id,.*")) {
+         out.reset();
          out.writeObject(roomDetailService.findByMaPhongAndMaHoaDon(line.split(",")[1].split("_")[0], line.split(",")[1].split("_")[1]));
       } else if (line.equals("find-by-date")) {
          Instant startDate = (Instant) in.readObject();
          Instant endDate = (Instant) in.readObject();
+         out.reset();
          out.writeObject(roomDetailService.findByDate(startDate, endDate));
       } else if (line.matches("calc-total-hours-use-of-customer,.*")) {
          dos.writeLong(roomDetailService.calcTotalHoursOfUseOfCustomer(line.split(",")[1]));
@@ -194,8 +205,10 @@ public class ServerThread implements Runnable {
       } else if (line.matches("delete-serviceDetail")) {
          dos.writeBoolean(serviceDetailService.deleteChiTietHD_DichVu((ChiTietHD_DichVu) in.readObject()));
       } else if (line.matches("find-by-bill-id,.*")) {
+         out.reset();
          out.writeObject(serviceDetailService.findByMaHoaDon(line.split(",")[1]));
       } else if (line.matches("find-by-service-id,*")) {
+         out.reset();
          out.writeObject(serviceDetailService.findByMaDichVu(line.split(",")[1]));
       } else {
          out.writeObject(null);
@@ -213,18 +226,24 @@ public class ServerThread implements Runnable {
       } else if (line.matches("delete-bill,.*")) {
          dos.writeBoolean(billService.deleteHoaDonThanhToan(line.split(",")[1]));
       } else if (line.equals("find-all-bill")) {
+         out.reset();
          out.writeObject(billService.findAll());
       } else if (line.matches("find-bill,.*")) {
+         out.reset();
          out.writeObject(billService.findBill(line.split(",")[1]));
       } else if (line.equals("find-bill-by-date-create")) {
          Instant ngayTao = (Instant) in.readObject();
+         out.reset();
          out.writeObject(billService.findBill(ngayTao));
       } else if (line.matches("find-bill-by-room-id,.*")) {
          HoaDonThanhToan bill = billService.findByRoomUsing(line.split(",")[1]);
+         out.reset();
          out.writeObject(bill);
       } else if (line.matches("find-bill-by-customer-id,.*")) {
+         out.reset();
          out.writeObject(billService.findByCustomerID(line.split(",")[1]));
       } else if (line.matches("find-bill-by-employee-id,.*")) {
+         out.reset();
          out.writeObject(billService.findByEmployeeID(line.split(",")[1]));
       } else if (line.equals("count-bill")) {
          dos.writeLong(billService.countBill());
@@ -233,6 +252,7 @@ public class ServerThread implements Runnable {
       } else if (line.matches("get-bill-by-date,.*")) {
          Instant date = (Instant) in.readObject();
          String type = line.split(",")[1];
+         out.reset();
          out.writeObject(billService.getBillsByDate(date, type));
       } else if (line.equals("calc-money")) {
          dos.writeLong(billService.calcMoney());
@@ -250,10 +270,10 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void serviceController(String line) {
       if (line.equals("find-all-service")) {
-         out.flush();
+         out.reset();
          out.writeObject(serviceService.findAllDichVu());
-         out.flush();
       } else if (line.matches("find-service,.*")) {
+         out.reset();
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
       } else if (line.equals("add-service")) {
          dos.writeBoolean(false);
@@ -264,6 +284,7 @@ public class ServerThread implements Runnable {
          boolean result = serviceService.deleteDichVu((DichVu) in.readObject());
          dos.writeBoolean(result);
       } else if (line.matches("find-service-by-bill-id,.*")) {
+         out.reset();
          out.writeObject(serviceService.findListDichVuByMaHoaDon(line.split(",")[1]));
       } else if (line.equals("count-all-service")) {
          dos.writeLong(serviceService.countDichVu());
@@ -275,14 +296,19 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void employeeController(String line) {
       if (line.equals("find-all-employee")) {
+         out.reset();
          out.writeObject(employeeService.findAll());
       } else if (line.matches("find-employee,.*")) {
+         out.reset();
          out.writeObject(employeeService.findByMaNhanVien(line.split(",")[1]));
       } else if (line.matches("find-employee-by-name,.*")) {
+         out.reset();
          out.writeObject(employeeService.findByHoTen(line.split(",")[1]));
       } else if (line.matches("find-employee-by-cccd,.*")) {
+         out.reset();
          out.writeObject(employeeService.findByCCCD(line.split(",")[1]));
       } else if (line.matches("find-employee-by-phone,.*")) {
+         out.reset();
          out.writeObject(employeeService.findBySoDienThoai(Integer.parseInt(line.split(",")[1])));
       } else if (line.equals("add-employee")) {
          boolean result = employeeService.addEmployee((NhanVien) in.readObject());
@@ -308,15 +334,19 @@ public class ServerThread implements Runnable {
       } else if (line.matches("delete-room,.*")) {
          dos.writeBoolean(roomService.deletePhong(line.split(",")[1]));
       } else if (line.equals("find-all-room")) {
+         out.reset();
          out.writeObject(roomService.findAll());
       } else if (line.matches("find-room,.*")) {
+         out.reset();
          out.writeObject(roomService.findByMaPhong(line.split(",")[1]));
       } else if (line.equals("find-room-by-type-status-capacity")) {
          List<Integer> arrType = (List<Integer>) in.readObject();
          List<Integer> arrStatus = (List<Integer>) in.readObject();
          int capacity = dis.readInt();
+         out.reset();
          out.writeObject(roomService.findRoomByTypeStatusCapacity(arrType, arrStatus, capacity));
       } else if (line.matches("find-room-by-status,.*")) {
+         out.reset();
          out.writeObject(roomService.findRoomByStatus(Integer.parseInt(line.split(",")[1])));
       } else if (line.matches("count-room-by-status,.*")) {
          dos.writeLong(roomService.countRoomStatus(Integer.parseInt(line.split(",")[1])));
@@ -330,12 +360,16 @@ public class ServerThread implements Runnable {
    private void bookingTicketController(String line) {
 
       if (line.equals("find-all-booking-ticket")) {
+         out.reset();
          out.writeObject(bookingTicketService.findAll());
       } else if (line.matches("find-booking-ticket,.*")) {
+         out.reset();
          out.writeObject(bookingTicketService.findByMaPhieuDat(line.split(",")[1]));
       } else if (line.matches("find-booking-ticket-by-room-id,.*")) {
+         out.reset();
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
       } else if (line.equals("find-all-booking-ticket-not-used")) {
+         out.reset();
          out.writeObject(bookingTicketService.findAllBookingTicketNotUsed());
       } else if (line.equals("count-booking-ticket-in-date")) {
          dos.writeLong(bookingTicketService.countBookingTicketInDate((Instant) in.readObject()));
@@ -359,6 +393,7 @@ public class ServerThread implements Runnable {
          if (account != null) {
             System.out.println("login-success");
             dos.writeUTF("login-success");
+            out.reset();
             out.writeObject(account);
          } else {
             dos.writeUTF("login-fail");
