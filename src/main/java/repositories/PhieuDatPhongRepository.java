@@ -2,6 +2,7 @@ package repositories;
 
 import entities.PhieuDatPhong;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -24,4 +25,6 @@ public interface PhieuDatPhongRepository {
    public PhieuDatPhong findBookingTicketByRoomID(String roomID);
 
    public List<PhieuDatPhong> findAllBookingTicketNotUsed();
+
+   public Long countBookingTicketInDate(Instant date);
 }

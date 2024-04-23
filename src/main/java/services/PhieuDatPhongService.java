@@ -5,6 +5,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import repositories.PhieuDatPhongRepository;
 
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -97,5 +98,12 @@ public class PhieuDatPhongService implements PhieuDatPhongRepository {
       return em.createNamedQuery("PhieuDatPhong.findAllBookingTicketNotUsed", PhieuDatPhong.class)
                    .getResultStream()
                    .toList();
+   }
+
+   @Override
+   public Long countBookingTicketInDate(Instant date) {
+      return em.createNamedQuery("PhieuDatPhong.countBookingTicketInDate", Long.class)
+                   .setParameter("date", date)
+                   .getSingleResult();
    }
 }

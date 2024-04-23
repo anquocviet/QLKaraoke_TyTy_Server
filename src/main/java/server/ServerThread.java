@@ -172,8 +172,7 @@ public class ServerThread implements Runnable {
          out.writeObject(roomDetailService.findByMaPhong(line.split(",")[1]));
       } else if (line.matches("find-by-room-bill-id,.*")) {
          out.writeObject(roomDetailService.findByMaPhongAndMaHoaDon(line.split(",")[1].split("_")[0], line.split(",")[1].split("_")[1]));
-      }
-      else if (line.equals("find-by-date")) {
+      } else if (line.equals("find-by-date")) {
          Instant startDate = (Instant) in.readObject();
          Instant endDate = (Instant) in.readObject();
          out.writeObject(roomDetailService.findByDate(startDate, endDate));
@@ -251,8 +250,9 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void serviceController(String line) {
       if (line.equals("find-all-service")) {
-         serviceService.findAllDichVu().forEach(System.out::println);
+         out.flush();
          out.writeObject(serviceService.findAllDichVu());
+         out.flush();
       } else if (line.matches("find-service,.*")) {
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
       } else if (line.equals("add-service")) {
@@ -337,6 +337,8 @@ public class ServerThread implements Runnable {
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
       } else if (line.equals("find-all-booking-ticket-not-used")) {
          out.writeObject(bookingTicketService.findAllBookingTicketNotUsed());
+      } else if (line.equals("count-booking-ticket-in-date")) {
+         dos.writeLong(bookingTicketService.countBookingTicketInDate((Instant) in.readObject()));
       } else if (line.equals("add-booking-ticket")) {
          PhieuDatPhong bookingTicket = (PhieuDatPhong) in.readObject();
          dos.writeBoolean(bookingTicketService.addPhieuDatPhong(bookingTicket));
