@@ -10,6 +10,8 @@ import server.Server;
  */
 public class Main {
    public static void main(String[] args) {
+      EntityManagerFactory emf = Persistence.createEntityManagerFactory("MariaDB Karaoke");
+      EntityManager em = emf.createEntityManager();
       new Server().start();
    }
 }

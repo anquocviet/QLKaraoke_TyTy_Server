@@ -38,7 +38,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -243,13 +242,26 @@ public class ServerThread implements Runnable {
       } else if (line.matches("find-bill-by-customer-id,.*")) {
          out.reset();
          out.writeObject(billService.findByCustomerID(line.split(",")[1]));
+      } else if (line.matches("find-bill-by-phone-customer,.*")) {
+         out.reset();
+         out.writeObject(billService.findByPhoneCustomer(line.split(",")[1]));
+      } else if (line.matches("find-bill-by-name-customer,.*")) {
+         out.reset();
+         out.writeObject(billService.findByNameCustomer(line.split(",")[1]));
+      } else if (line.equals("find-bill-by-date")) {
+         out.reset();
+         out.writeObject(billService.findByDate((Instant) in.readObject()));
       } else if (line.matches("find-bill-by-employee-id,.*")) {
          out.reset();
          out.writeObject(billService.findByEmployeeID(line.split(",")[1]));
       } else if (line.equals("count-bill")) {
          dos.writeLong(billService.countBill());
+      } else if (line.equals("count-bill-by-date")) {
+         dos.writeLong(billService.countBillByDate((Instant) in.readObject()));
       } else if (line.matches("count-bill-by-customer-id,.*")) {
          dos.writeLong(billService.countBill(line.split(",")[1]));
+      } else if (line.matches("find-by-ma-khach-hang-not-pay,.*")) {
+         out.writeObject(billService.findBillByCustomerNotPay(line.split(",")[1]));
       } else if (line.matches("get-bill-by-date,.*")) {
          Instant date = (Instant) in.readObject();
          String type = line.split(",")[1];
