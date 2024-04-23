@@ -62,4 +62,10 @@ class NhanVienServiceTest {
         boolean result = new NhanVienService().deleteEmployee("NV0505");
         System.out.println(result);
     }
+
+    @Test
+    void demSoLuongNhanVien() {
+        Long result = new NhanVienService().demSoLuongNhanVien(2003);
+        System.out.println(result);
+    }
 }
