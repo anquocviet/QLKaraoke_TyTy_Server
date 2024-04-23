@@ -29,7 +29,10 @@ import java.util.Objects;
 @NamedQueries({
       @NamedQuery(name = "PhieuDatPhong.findByMaPhieuDat", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.maPhieuDat = :maPhieuDat"),
       @NamedQuery(name = "PhieuDatPhong.findAll", query = "SELECT pdp FROM PhieuDatPhong pdp"),
-      @NamedQuery(name = "PhieuDatPhong.findBookingTicketByRoomID", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.phong.maPhong = :roomID")
+      @NamedQuery(name = "PhieuDatPhong.findBookingTicketByRoomID", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.phong.maPhong = :roomID AND pdp.tinhTrang = 0"),
+      @NamedQuery(name = "PhieuDatPhong.findAllBookingTicketNotUsed", query = "SELECT pdp FROM PhieuDatPhong pdp WHERE pdp.tinhTrang = 0"),
+      @NamedQuery(name = "PhieuDatPhong.countBookingTicketInDate",
+            query = "SELECT COUNT(pdp) FROM PhieuDatPhong pdp WHERE DAY(pdp.thoiGianLap) = DAY(:date) AND MONTH(pdp.thoiGianLap) = MONTH(:date) AND YEAR(pdp.thoiGianLap) = YEAR(:date)")
 
 })
 public class PhieuDatPhong implements Serializable {

@@ -85,10 +85,10 @@ public class ChiTietHD_PhongService implements ChiTietHD_PhongRepository {
    }
 
    @Override
-   public ChiTietHD_Phong findByMaPhongAndMaHoaDon(String maHoaDon, String maPhong) {
-      return em.createNamedQuery("ChiTietHD_Phong.findByMaHoaDonAndMaPhong", ChiTietHD_Phong.class)
-                   .setParameter("maHoaDon", maHoaDon)
+   public ChiTietHD_Phong findByMaPhongAndMaHoaDon(String maPhong, String maHoaDon) {
+      return em.createNamedQuery("ChiTietHD_Phong.findByMaPhongAndMaHoaDon", ChiTietHD_Phong.class)
                    .setParameter("maPhong", maPhong)
+                   .setParameter("maHoaDon", maHoaDon)
                    .getSingleResult();
    }
 

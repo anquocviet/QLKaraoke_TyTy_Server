@@ -4,6 +4,7 @@ import entities.CT_KhuyenMai;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import repositories.CT_KhuyenMaiRepository;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -11,13 +12,15 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class CT_KhuyenMaiServiceTest {
-
+    CT_KhuyenMaiRepository service = null;
     @BeforeEach
     void setUp() {
+        service = new CT_KhuyenMaiService();
     }
 
     @AfterEach
     void tearDown() {
+         service = null;
     }
 
     @Test
@@ -57,5 +60,10 @@ class CT_KhuyenMaiServiceTest {
 
     @Test
     void findByTenKhuyenMai() {
+    }
+
+    @Test
+    void testFindByMaKhuyenMai() {
+        service.findByMaKhuyenMai("").forEach(System.out::println);
     }
 }

@@ -138,7 +138,11 @@ public class ServerThread implements Runnable {
       if (line.equals("find-all-voucher")) {
          out.writeObject(voucherService.findAll());
       } else if (line.matches("find-voucher,.*")) {
-         out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
+         try {
+            out.writeObject(voucherService.findByMaKhuyenMai(line.split(",")[1]));
+         } catch (Exception e) {
+            out.writeObject(voucherService.findByMaKhuyenMai(""));
+         }
       } else if (line.matches("find-voucher-by-name,.*")) {
          out.writeObject(voucherService.findByTenKhuyenMai(line.split(",")[1]));
       } else if (line.equals("add-voucher")) {
@@ -166,6 +170,8 @@ public class ServerThread implements Runnable {
          out.writeObject(roomDetailService.findByMaHoaDon(line.split(",")[1]));
       } else if (line.matches("find-by-room-id,.*")) {
          out.writeObject(roomDetailService.findByMaPhong(line.split(",")[1]));
+      } else if (line.matches("find-by-room-bill-id,.*")) {
+         out.writeObject(roomDetailService.findByMaPhongAndMaHoaDon(line.split(",")[1].split("_")[0], line.split(",")[1].split("_")[1]));
       } else if (line.equals("find-by-date")) {
          Instant startDate = (Instant) in.readObject();
          Instant endDate = (Instant) in.readObject();
@@ -244,7 +250,9 @@ public class ServerThread implements Runnable {
    @SneakyThrows
    private void serviceController(String line) {
       if (line.equals("find-all-service")) {
+         out.flush();
          out.writeObject(serviceService.findAllDichVu());
+         out.flush();
       } else if (line.matches("find-service,.*")) {
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
       } else if (line.equals("add-service")) {
@@ -327,6 +335,10 @@ public class ServerThread implements Runnable {
          out.writeObject(bookingTicketService.findByMaPhieuDat(line.split(",")[1]));
       } else if (line.matches("find-booking-ticket-by-room-id,.*")) {
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
+      } else if (line.equals("find-all-booking-ticket-not-used")) {
+         out.writeObject(bookingTicketService.findAllBookingTicketNotUsed());
+      } else if (line.equals("count-booking-ticket-in-date")) {
+         dos.writeLong(bookingTicketService.countBookingTicketInDate((Instant) in.readObject()));
       } else if (line.equals("add-booking-ticket")) {
          PhieuDatPhong bookingTicket = (PhieuDatPhong) in.readObject();
          dos.writeBoolean(bookingTicketService.addPhieuDatPhong(bookingTicket));
