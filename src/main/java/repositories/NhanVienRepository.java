@@ -26,4 +26,5 @@ public interface NhanVienRepository {
    public boolean updateEmployee(NhanVien nhanVien);
 
    public boolean deleteEmployee(String maNhanVien);
+   public Long demSoLuongNhanVien(int year);
 }

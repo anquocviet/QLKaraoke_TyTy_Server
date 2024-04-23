@@ -184,4 +184,11 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
                    .setParameter("maKhachHang", customerID)
                    .getFirstResult();
    }
+
+   @Override
+   public long countByDate(LocalDate date) {
+      return em.createNamedQuery("HoaDonThanhToan.countByDate", Long.class)
+                   .setParameter("date", date)
+                   .getFirstResult();
+   }
 }

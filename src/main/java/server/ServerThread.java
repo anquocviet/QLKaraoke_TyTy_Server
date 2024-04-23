@@ -38,6 +38,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -156,7 +157,7 @@ public class ServerThread implements Runnable {
          dos.writeBoolean(voucherService.addCT_KhuyenMai((CT_KhuyenMai) in.readObject()));
       } else if (line.equals("update-voucher")) {
          dos.writeBoolean(voucherService.updateCT_KhuyenMai((CT_KhuyenMai) in.readObject()));
-      } else if (line.matches("delete-voucher,.*}")) {
+      } else if (line.matches("delete-voucher,.*")) {
          dos.writeBoolean(voucherService.deleteCT_KhuyenMai(line.split(",")[1]));
       } else if (line.equals("count-voucher")) {
          dos.writeUTF("0");
@@ -262,6 +263,8 @@ public class ServerThread implements Runnable {
          dos.writeLong(billService.calcMoney(date, type));
       } else if (line.matches("calc-money-by-customer-id,.*")) {
          dos.writeLong(billService.calcMoney(line.split(",")[1]));
+      } else if (line.matches("count-by-date,.*")) {
+         dos.writeLong(billService.countByDate(LocalDate.from(Instant.parse(line.split(",")[1]))));
       } else {
          out.writeObject(null);
       }
@@ -318,6 +321,8 @@ public class ServerThread implements Runnable {
          dos.writeBoolean(result);
       } else if (line.matches("delete-employee,.*")) {
          dos.writeBoolean(employeeService.deleteEmployee(line.split(",")[1]));
+      } else if (line.matches("count-employee,.*")) {
+         dos.writeLong(employeeService.demSoLuongNhanVien(Integer.parseInt(line.split(",")[1])));
       } else {
          out.writeObject(null);
       }
