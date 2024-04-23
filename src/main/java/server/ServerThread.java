@@ -345,7 +345,6 @@ public class ServerThread implements Runnable {
       if (line.equals("login")) {
          TaiKhoan account = accountService.login((TaiKhoan) in.readObject());
          if (account != null) {
-            System.out.println("login-success");
             dos.writeUTF("login-success");
             out.writeObject(account);
          } else {
@@ -354,6 +353,8 @@ public class ServerThread implements Runnable {
       } else if (line.equals("add-account")) {
          boolean result = accountService.addTaiKhoan((TaiKhoan) in.readObject());
          dos.writeBoolean(result);
+      } else if (line.equals("all-account")) {
+         out.writeObject(accountService.findAll());
       } else if (line.equals("update-account")) {
          boolean result = accountService.updateTaiKhoan((TaiKhoan) in.readObject());
          dos.writeBoolean(result);
