@@ -109,4 +109,19 @@ public class PhieuDatPhongServiceTest {
       PhieuDatPhong p = service.findBookingTicketByRoomID("P104VIP");
       System.out.println(p);
    }
+
+   @Test
+   void findBookingTicketByRoomID() {
+   }
+
+   @Test
+   void findAllBookingTicketNotUsed() {
+   }
+
+   @Test
+   void countBookingTicketInDate() {
+      Instant date = Instant.parse("2023-11-15T00:00:00Z");
+      Long count = service.countBookingTicketInDate(date);
+      System.out.println("Số lượng phiếu đặt phòng trong ngày " + date + " là: " + count);
+   }
 }
