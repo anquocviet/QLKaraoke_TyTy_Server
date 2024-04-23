@@ -32,6 +32,8 @@ public class ChiTietHD_PhongService implements ChiTietHD_PhongRepository {
    public boolean addChiTietHD_Phong(ChiTietHD_Phong ct) {
       try {
          em.getTransaction().begin();
+         ct.setHoaDon(em.merge(ct.getHoaDon()));
+         ct.setPhong(em.merge(ct.getPhong()));
          em.persist(ct);
          em.getTransaction().commit();
          return true;

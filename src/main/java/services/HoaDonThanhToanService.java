@@ -8,7 +8,6 @@ import jakarta.persistence.TypedQuery;
 import repositories.HoaDonThanhToanRepository;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,6 +127,34 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
+   public List<HoaDonThanhToan> findBillByCustomerNotPay(String customerID) {
+      return em.createNamedQuery("HoaDonThanhToan.findByMaKhachHangNotPay")
+                   .setParameter("maKhachHang", customerID)
+                   .getResultList();
+   }
+
+   @Override
+   public List<HoaDonThanhToan> findByPhoneCustomer(String phone) {
+      return em.createNamedQuery("HoaDonThanhToan.findByPhoneCustomer")
+                   .setParameter("soDienThoai", "%" + phone + "%")
+                   .getResultList();
+   }
+
+   @Override
+   public List<HoaDonThanhToan> findByNameCustomer(String name) {
+      return em.createNamedQuery("HoaDonThanhToan.findByNameCustomer")
+                   .setParameter("tenKhachHang", "%" + name + "%")
+                   .getResultList();
+   }
+
+   @Override
+   public List<HoaDonThanhToan> findByDate(Instant date) {
+      return em.createNamedQuery("HoaDonThanhToan.findByDate")
+                   .setParameter("date", date)
+                   .getResultList();
+   }
+
+   @Override
    public int countBill() {
       return em.createNamedQuery("HoaDonThanhToan.countBill")
                    .getFirstResult();
@@ -137,7 +164,14 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    public int countBill(String customerID) {
       return em.createNamedQuery("HoaDonThanhToan.countBillByMaKhachHang")
                    .setParameter("maKhachHang", customerID)
-                     .getFirstResult();
+                   .getFirstResult();
+   }
+
+   @Override
+   public long countBillByDate(Instant date) {
+      return (long) em.createNamedQuery("HoaDonThanhToan.countBillByDate")
+                   .setParameter("date", date)
+                   .getSingleResult();
    }
 
    @Override
@@ -186,7 +220,7 @@ public class HoaDonThanhToanService implements HoaDonThanhToanRepository {
    }
 
    @Override
-   public long countByDate(LocalDate date) {
+   public long countByDate(Instant date) {
       return em.createNamedQuery("HoaDonThanhToan.countByDate", Long.class)
                    .setParameter("date", date)
                    .getFirstResult();

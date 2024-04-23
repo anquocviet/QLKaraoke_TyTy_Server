@@ -49,7 +49,7 @@ class KhachHangServiceTest {
 
     @Test
     void findBySoDienThoai() {
-        List<KhachHang> khachHangs = (List<KhachHang>) new KhachHangService().findBySoDienThoai("359");
+        List<KhachHang> khachHangs = (List<KhachHang>) new KhachHangService().findBySoDienThoai("355241429");
         for (KhachHang khachHang : khachHangs) {
             System.out.println(khachHang);
         }
@@ -58,7 +58,7 @@ class KhachHangServiceTest {
 
     @Test
     void addCustomer() {
-        KhachHang khachHang = new KhachHang("", "Vũ Hoàng Sơn", 355241429, 2003, 1);
+        KhachHang khachHang = new KhachHang("", "Vũ Phi", 345678921, 2003, 1);
         boolean result = new KhachHangService().addCustomer(khachHang);
         System.out.println(result);
         assertTrue(result);

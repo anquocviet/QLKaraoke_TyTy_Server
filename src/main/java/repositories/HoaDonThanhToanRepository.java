@@ -34,9 +34,19 @@ public interface HoaDonThanhToanRepository {
 
    public List<HoaDonThanhToan> findByEmployeeID(String employeeID);
 
+   public List<HoaDonThanhToan> findBillByCustomerNotPay(String customerID);
+
+   public List<HoaDonThanhToan> findByPhoneCustomer(String phone);
+
+   public List<HoaDonThanhToan> findByNameCustomer(String name);
+
+   public List<HoaDonThanhToan> findByDate(Instant date);
+
    public int countBill();
 
    public int countBill(String customerID);
+
+   public long countBillByDate(Instant date);
 
    public Map<Integer, Integer> getBillsByDate(Instant date, String type);
 
@@ -45,5 +55,6 @@ public interface HoaDonThanhToanRepository {
    public long calcMoney(Instant date, String type);
 
    public long calcMoney(String customerID);
-   public long countByDate(LocalDate date);
+
+   public long countByDate(Instant date);
 }
