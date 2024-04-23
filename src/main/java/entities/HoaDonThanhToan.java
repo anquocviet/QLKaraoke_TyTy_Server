@@ -58,7 +58,7 @@ import java.util.Set;
         @NamedQuery(name = "HoaDonThanhToan.calcMoneyByQuarter", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE QUARTER(h.ngayLap) = QUARTER(:ngayLap) AND YEAR(h.ngayLap) = YEAR(:ngayLap)"),
         @NamedQuery(name = "HoaDonThanhToan.calcMoneyByYear", query = "SELECT SUM(h.tongTien) FROM HoaDonThanhToan h WHERE YEAR(h.ngayLap) = YEAR(:ngayLap)"),
         @NamedQuery(name = "HoaDonThanhToan.countByDate",
-                query = "SELECT COUNT(h) FROM HoaDonThanhToan h WHERE FUNCTION('DATE', h.ngayLap) = :date"
+                query = "SELECT COUNT(h) FROM HoaDonThanhToan h WHERE YEAR(h.ngayLap) = YEAR(:date) AND MONTH(h.ngayLap) = MONTH(:date)"
         )
 })
 public class HoaDonThanhToan implements Serializable {

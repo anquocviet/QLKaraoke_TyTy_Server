@@ -238,7 +238,7 @@ public class ServerThread implements Runnable {
       } else if (line.matches("calc-money-by-customer-id,.*")) {
          dos.writeLong(billService.calcMoney(line.split(",")[1]));
       } else if (line.matches("count-by-date,.*")) {
-         dos.writeLong(billService.countByDate(LocalDate.from(Instant.parse(line.split(",")[1]))));
+         dos.writeLong(billService.countByDate(Instant.parse(line.split(",")[1])));
       } else {
          out.writeObject(null);
       }
