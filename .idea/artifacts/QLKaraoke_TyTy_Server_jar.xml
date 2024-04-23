@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="QLKaraoke_TyTy_Server">
-    <output-path>$PROJECT_DIR$/out/artifacts/QLKaraoke_TyTy_Server</output-path>
+  <artifact type="jar" name="QLKaraoke_TyTy_Server:jar">
+    <output-path>$PROJECT_DIR$/../QLKaraoke_TyTy/libs</output-path>
     <root id="archive" name="QLKaraoke_TyTy_Server.jar">
       <element id="module-output" name="QLKaraoke_TyTy_Server" />
     </root>

@@ -28,86 +28,89 @@ import java.util.Set;
 @NoArgsConstructor
 @ToString
 @NamedQueries({
-      @NamedQuery(name = "NhanVien.findAll", query = "SELECT nv FROM NhanVien nv"),
-      @NamedQuery(name = "NhanVien.findByMaNhanVien", query = "SELECT nv FROM NhanVien nv WHERE nv.maNhanVien LIKE :maNhanVien"),
-      @NamedQuery(name = "NhanVien.findByHoTen", query = "SELECT nv FROM NhanVien nv WHERE nv.hoTen LIKE :hoTen"),
-      @NamedQuery(name = "NhanVien.findByCCCD", query = "SELECT nv FROM NhanVien nv WHERE nv.cccd LIKE :cccd"),
-      @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE :soDienThoai LIKE CAST(nv.soDienThoai AS STRING)"),
+        @NamedQuery(name = "NhanVien.findAll", query = "SELECT nv FROM NhanVien nv"),
+        @NamedQuery(name = "NhanVien.findByMaNhanVien", query = "SELECT nv FROM NhanVien nv WHERE nv.maNhanVien LIKE :maNhanVien"),
+        @NamedQuery(name = "NhanVien.findByHoTen", query = "SELECT nv FROM NhanVien nv WHERE nv.hoTen LIKE :hoTen"),
+        @NamedQuery(name = "NhanVien.findByCCCD", query = "SELECT nv FROM NhanVien nv WHERE nv.cccd LIKE :cccd"),
+        @NamedQuery(name = "NhanVien.findBySoDienThoai", query = "SELECT nv FROM NhanVien nv WHERE :soDienThoai LIKE CAST(nv.soDienThoai AS STRING)"),
+        @NamedQuery(name = "NhanVien.CountNV",
+                query = "SELECT COUNT(nv) FROM NhanVien nv WHERE FUNCTION('YEAR', nv.ngaySinh) = :year"
+        )
 })
 
 public class NhanVien implements Serializable {
-   @Serial
-   private static final long serialVersionUID = 4231211857730583614L;
+    @Serial
+    private static final long serialVersionUID = 4231211857730583614L;
 
-   @Id
-   @EqualsAndHashCode.Include
-   @Column(name = "MaNhanVien", nullable = false)
-   private String maNhanVien;
+    @Id
+    @EqualsAndHashCode.Include
+    @Column(name = "MaNhanVien", nullable = false)
+    private String maNhanVien;
 
-   @Column(name = "HoTen")
-   private String hoTen;
+    @Column(name = "HoTen")
+    private String hoTen;
 
-   @Column(name = "CCCD")
-   private String cccd;
+    @Column(name = "CCCD")
+    private String cccd;
 
-   @Column(name = "SoDienThoai")
-   private Integer soDienThoai;
+    @Column(name = "SoDienThoai")
+    private Integer soDienThoai;
 
-   @Column(name = "NgaySinh")
-   private Instant ngaySinh;
+    @Column(name = "NgaySinh")
+    private Instant ngaySinh;
 
-   @Column(name = "DiaChi")
-   private String diaChi;
+    @Column(name = "DiaChi")
+    private String diaChi;
 
-   @Column(name = "GioiTinh")
-   private Integer gioiTinh;
+    @Column(name = "GioiTinh")
+    private Integer gioiTinh;
 
-   @Column(name = "ChucVu")
-   @Enumerated(EnumType.STRING)
-   private Enum_ChucVu chucVu;
+    @Column(name = "ChucVu")
+    @Enumerated(EnumType.STRING)
+    private Enum_ChucVu chucVu;
 
-   @Column(name = "TrangThai")
-   @Enumerated(EnumType.STRING)
-   private Enum_TrangThaiLamViec trangThai;
+    @Column(name = "TrangThai")
+    @Enumerated(EnumType.STRING)
+    private Enum_TrangThaiLamViec trangThai;
 
-   @Column(name = "AnhDaiDien")
-   private String anhDaiDien;
+    @Column(name = "AnhDaiDien")
+    private String anhDaiDien;
 
-   @OneToMany(mappedBy = "nhanVien")
-   @ToString.Exclude
-   private Set<HoaDonThanhToan> listHoaDonThanhToan;
+    @OneToMany(mappedBy = "nhanVien")
+    @ToString.Exclude
+    private Set<HoaDonThanhToan> listHoaDonThanhToan;
 
-   @OneToMany(mappedBy = "nhanVien")
-   @ToString.Exclude
-   private Set<PhieuDatPhong> listPhieuDatPhong;
+    @OneToMany(mappedBy = "nhanVien")
+    @ToString.Exclude
+    private Set<PhieuDatPhong> listPhieuDatPhong;
 
-   public NhanVien(String maNhanVien) {
-      this.maNhanVien = maNhanVien;
-   }
+    public NhanVien(String maNhanVien) {
+        this.maNhanVien = maNhanVien;
+    }
 
-   public NhanVien(String maNhanVien, String hoTen, String cccd, Integer soDienThoai, Instant ngaySinh, String diaChi, Integer gioiTinh, Enum_ChucVu chucVu, Enum_TrangThaiLamViec trangThai, String anhDaiDien) {
-      this.maNhanVien = maNhanVien;
-      this.hoTen = hoTen;
-      this.cccd = cccd;
-      this.soDienThoai = soDienThoai;
-      this.ngaySinh = ngaySinh;
-      this.diaChi = diaChi;
-      this.gioiTinh = gioiTinh;
-      this.chucVu = chucVu;
-      this.trangThai = trangThai;
-      this.anhDaiDien = anhDaiDien;
-   }
+    public NhanVien(String maNhanVien, String hoTen, String cccd, Integer soDienThoai, Instant ngaySinh, String diaChi, Integer gioiTinh, Enum_ChucVu chucVu, Enum_TrangThaiLamViec trangThai, String anhDaiDien) {
+        this.maNhanVien = maNhanVien;
+        this.hoTen = hoTen;
+        this.cccd = cccd;
+        this.soDienThoai = soDienThoai;
+        this.ngaySinh = ngaySinh;
+        this.diaChi = diaChi;
+        this.gioiTinh = gioiTinh;
+        this.chucVu = chucVu;
+        this.trangThai = trangThai;
+        this.anhDaiDien = anhDaiDien;
+    }
 
-   @Override
-   public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
-      NhanVien nhanVien = (NhanVien) o;
-      return Objects.equals(maNhanVien, nhanVien.maNhanVien);
-   }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NhanVien nhanVien = (NhanVien) o;
+        return Objects.equals(maNhanVien, nhanVien.maNhanVien);
+    }
 
-   @Override
-   public int hashCode() {
-      return Objects.hashCode(maNhanVien);
-   }
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(maNhanVien);
+    }
 }
