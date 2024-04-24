@@ -6,6 +6,7 @@ import jakarta.persistence.EntityTransaction;
 import repositories.PhieuDatPhongRepository;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -91,6 +92,15 @@ public class PhieuDatPhongService implements PhieuDatPhongRepository {
                    .getResultStream()
                    .findFirst()
                    .orElse(null);
+   }
+
+   @Override
+   public List<PhieuDatPhong> findBookingTicketByCustomerID(String customerID) {
+        List<PhieuDatPhong> list = em.createNamedQuery("PhieuDatPhong.findBookingTicketByCustomerID", PhieuDatPhong.class)
+                     .setParameter("customerID", customerID)
+                     .getResultStream()
+                     .toList();
+        return list == null ? new ArrayList<>() : list;
    }
 
    @Override
