@@ -23,4 +23,22 @@ class ChiTietHD_DichVuServiceTest {
    void findByMaHoaDon() {
       ctService.findByMaHoaDon("HD05131223").forEach(System.out::println);
    }
+
+   @Test
+   void addChiTietHD_DichVu() {
+   }
+
+   @Test
+   void updateChiTietHD_DichVu() {
+   }
+
+   @Test
+   void deleteChiTietHD_DichVu() {
+   }
+
+   @Test
+   void findByMaDichVu() {
+//      ctService.findByMaHoaDon("HD01240424").forEach(System.out::println);
+      System.out.println(ctService.findByMaHoaDon("HD01240424").size());
+   }
 }

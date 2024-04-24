@@ -6,6 +6,7 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import repositories.ChiTietHD_DichVuRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,8 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    public boolean addChiTietHD_DichVu(ChiTietHD_DichVu ct) {
       try {
          transaction.begin();
+         ct.setHoaDon(em.merge(ct.getHoaDon()));
+         ct.setDichVu(em.merge(ct.getDichVu()));
          em.persist(ct);
          transaction.commit();
          return true;
@@ -58,6 +61,7 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
    public boolean deleteChiTietHD_DichVu(ChiTietHD_DichVu ct) {
       try {
          transaction.begin();
+         ct.setId(em.merge(ct).getId());
          em.remove(ct);
          transaction.commit();
          return true;
@@ -70,17 +74,16 @@ public class ChiTietHD_DichVuService implements ChiTietHD_DichVuRepository {
 
    @Override
    public List<ChiTietHD_DichVu> findByMaHoaDon(String maHoaDon) {
-      return em.createNamedQuery("ChiTietHD_DichVu.findByMaHoaDon", ChiTietHD_DichVu.class)
-                   .setParameter("maHoaDon", maHoaDon)
-                   .getResultStream()
-                   .toList();
+      List<ChiTietHD_DichVu> list = em.createNamedQuery("ChiTietHD_DichVu.findByMaHoaDon")
+                        .setParameter("maHoaDon", maHoaDon)
+                        .getResultList();
+      return list == null ? new ArrayList<>() : list;
    }
 
    @Override
    public List<ChiTietHD_DichVu> findByMaDichVu(String maDichVu) {
       return em.createNamedQuery("ChiTietHD_DichVu.findByMaDichVu", ChiTietHD_DichVu.class)
                    .setParameter("maDichVu", maDichVu)
-                   .getResultStream()
-                   .toList();
+                   .getResultList();
    }
 }
