@@ -291,7 +291,7 @@ public class ServerThread implements Runnable {
          out.reset();
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
       } else if (line.equals("add-service")) {
-         dos.writeBoolean(false);
+         dos.writeBoolean(serviceService.addDichVu((DichVu) in.readObject()));
       } else if (line.equals("update-service")) {
          boolean result = serviceService.updateDichVu((DichVu) in.readObject());
          dos.writeBoolean(result);

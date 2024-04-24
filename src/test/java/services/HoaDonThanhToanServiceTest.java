@@ -128,7 +128,7 @@ class HoaDonThanhToanServiceTest {
 
    @Test
    void findByNameCustomer() {
-      List<HoaDonThanhToan> list = service.findByNameCustomer("Thi");
+      List<HoaDonThanhToan> list = service.findByNameCustomer("Nguyễn");
       list.forEach(System.out::println);
    }
 
