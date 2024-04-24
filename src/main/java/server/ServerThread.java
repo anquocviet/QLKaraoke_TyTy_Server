@@ -357,8 +357,14 @@ public class ServerThread implements Runnable {
          out.reset();
          out.writeObject(roomService.findAll());
       } else if (line.matches("find-room,.*")) {
+         String text = "";
+         try {
+            text = line.split(",")[1];
+         } catch (Exception e) {
+            text = "";
+         }
          out.reset();
-         out.writeObject(roomService.findByMaPhong(line.split(",")[1]));
+         out.writeObject(roomService.findByMaPhong(text));
       } else if (line.equals("find-room-by-type-status-capacity")) {
          List<Integer> arrType = (List<Integer>) in.readObject();
          List<Integer> arrStatus = (List<Integer>) in.readObject();
@@ -390,8 +396,8 @@ public class ServerThread implements Runnable {
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
       } else if (line.matches("find-booking-ticket-by-customer,.*")) {
          out.reset();
-            out.writeObject(bookingTicketService.findBookingTicketByCustomerID(line.split(",")[1]));
-      }else if (line.equals("find-all-booking-ticket-not-used")) {
+         out.writeObject(bookingTicketService.findBookingTicketByCustomerID(line.split(",")[1]));
+      } else if (line.equals("find-all-booking-ticket-not-used")) {
          out.reset();
          out.writeObject(bookingTicketService.findAllBookingTicketNotUsed());
       } else if (line.equals("count-booking-ticket-in-date")) {
