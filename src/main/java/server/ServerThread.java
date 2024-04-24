@@ -248,9 +248,11 @@ public class ServerThread implements Runnable {
       } else if (line.matches("find-bill-by-name-customer,.*")) {
          out.reset();
          out.writeObject(billService.findByNameCustomer(line.split(",")[1]));
-      } else if (line.equals("find-bill-by-date")) {
+      } else if (line.startsWith("find-bill-by-date,")) {
+         String dateString = line.split(",")[1];
+         Instant date = Instant.parse(dateString);
          out.reset();
-         out.writeObject(billService.findByDate((Instant) in.readObject()));
+         out.writeObject(billService.findByDate(date));
       } else if (line.matches("find-bill-by-employee-id,.*")) {
          out.reset();
          out.writeObject(billService.findByEmployeeID(line.split(",")[1]));
@@ -291,7 +293,8 @@ public class ServerThread implements Runnable {
          out.reset();
          out.writeObject(serviceService.findDichVu(line.split(",")[1]));
       } else if (line.equals("add-service")) {
-         dos.writeBoolean(false);
+         boolean result = serviceService.addDichVu((DichVu) in.readObject());
+         dos.writeBoolean(result);
       } else if (line.equals("update-service")) {
          boolean result = serviceService.updateDichVu((DichVu) in.readObject());
          dos.writeBoolean(result);
@@ -385,7 +388,10 @@ public class ServerThread implements Runnable {
       } else if (line.matches("find-booking-ticket-by-room-id,.*")) {
          out.reset();
          out.writeObject(bookingTicketService.findBookingTicketByRoomID(line.split(",")[1]));
-      } else if (line.equals("find-all-booking-ticket-not-used")) {
+      } else if (line.matches("find-booking-ticket-by-customer,.*")) {
+         out.reset();
+            out.writeObject(bookingTicketService.findBookingTicketByCustomerID(line.split(",")[1]));
+      }else if (line.equals("find-all-booking-ticket-not-used")) {
          out.reset();
          out.writeObject(bookingTicketService.findAllBookingTicketNotUsed());
       } else if (line.equals("count-booking-ticket-in-date")) {

@@ -24,6 +24,8 @@ public interface PhieuDatPhongRepository {
 
    public PhieuDatPhong findBookingTicketByRoomID(String roomID);
 
+   public List<PhieuDatPhong> findBookingTicketByCustomerID(String customerID);
+
    public List<PhieuDatPhong> findAllBookingTicketNotUsed();
 
    public Long countBookingTicketInDate(Instant date);
